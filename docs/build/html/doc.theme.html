@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3. gptables GPTable &mdash; gptables 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. gptables XlsxWriter wrappers" href="doc.wrappers.html" />
+    <link rel="prev" title="2. gptables Theme" href="doc.gptable.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> gptables
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Package Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="doc.api.html">1. gptables API functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.gptable.html">2. gptables Theme</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. gptables GPTable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">4. gptables XlsxWriter wrappers</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Usage:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="use.api.html">1. gptables API usage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">gptables</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>3. gptables GPTable</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/doc.theme.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-gptables.core.gptable">
+<span id="gptables-gptable"></span><h1>3. gptables GPTable<a class="headerlink" href="#module-gptables.core.gptable" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="gptables.core.gptable.GPTable">
+<em class="property">class </em><code class="sig-prename descclassname">gptables.core.gptable.</code><code class="sig-name descname">GPTable</code><span class="sig-paren">(</span><em class="sig-param">table</em>, <em class="sig-param">title</em>, <em class="sig-param">scope</em>, <em class="sig-param">units</em>, <em class="sig-param">source</em>, <em class="sig-param">subtitles=[]</em>, <em class="sig-param">legend=[]</em>, <em class="sig-param">annotations={}</em>, <em class="sig-param">notes=[]</em>, <em class="sig-param">index_columns={2: 0}</em>, <em class="sig-param">additional_formatting=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Good Practice Table. Stores a table and metadata for writing a table
+to excel.</p>
+<dl class="attribute">
+<dt id="gptables.core.gptable.GPTable.table">
+<code class="sig-name descname">table</code><a class="headerlink" href="#gptables.core.gptable.GPTable.table" title="Permalink to this definition">¶</a></dt>
+<dd><p>table to be written to an Excel workbook</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gptables.core.gptable.GPTable.title">
+<code class="sig-name descname">title</code><a class="headerlink" href="#gptables.core.gptable.GPTable.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>description of the table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gptables.core.gptable.GPTable.subtitles">
+<code class="sig-name descname">subtitles</code><a class="headerlink" href="#gptables.core.gptable.GPTable.subtitles" title="Permalink to this definition">¶</a></dt>
+<dd><p>subtitiles as a list of strings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gptables.core.gptable.GPTable.scope">
+<code class="sig-name descname">scope</code><a class="headerlink" href="#gptables.core.gptable.GPTable.scope" title="Permalink to this definition">¶</a></dt>
+<dd><p>description of scope/basis of data in table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gptables.core.gptable.GPTable.units">
+<code class="sig-name descname">units</code><a class="headerlink" href="#gptables.core.gptable.GPTable.units" title="Permalink to this definition">¶</a></dt>
+<dd><p>units used in all (str) or each (dict) column of <cite>table</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str or dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gptables.core.gptable.GPTable.legend">
+<code class="sig-name descname">legend</code><a class="headerlink" href="#gptables.core.gptable.GPTable.legend" title="Permalink to this definition">¶</a></dt>
+<dd><p>descriptions of special notation used in <cite>table</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gptables.core.gptable.GPTable.annotations">
+<code class="sig-name descname">annotations</code><a class="headerlink" href="#gptables.core.gptable.GPTable.annotations" title="Permalink to this definition">¶</a></dt>
+<dd><p>notes that are referenced in header or table elements (excluding data)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gptables.core.gptable.GPTable.notes">
+<code class="sig-name descname">notes</code><a class="headerlink" href="#gptables.core.gptable.GPTable.notes" title="Permalink to this definition">¶</a></dt>
+<dd><p>notes that are not referenced</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gptables.core.gptable.GPTable.index_columns">
+<code class="sig-name descname">index_columns</code><a class="headerlink" href="#gptables.core.gptable.GPTable.index_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>mapping an index level to a 0-indexed column as {level: column}.
+Default is a level two index in the first column ({2: 0}).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gptables.core.gptable.GPTable.additional_formatting">
+<code class="sig-name descname">additional_formatting</code><a class="headerlink" href="#gptables.core.gptable.GPTable.additional_formatting" title="Permalink to this definition">¶</a></dt>
+<dd><p>table-specific formatting for columns, rows or individual cells</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.add_annotation">
+<code class="sig-name descname">add_annotation</code><span class="sig-paren">(</span><em class="sig-param">new_annotation</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.add_annotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add one or more annotations to the existing <cite>annotations</cite> dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.add_legend">
+<code class="sig-name descname">add_legend</code><span class="sig-paren">(</span><em class="sig-param">new_legend</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.add_legend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a single legend entry to the existing <cite>legend</cite> list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.add_note">
+<code class="sig-name descname">add_note</code><span class="sig-paren">(</span><em class="sig-param">new_note</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.add_note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a single note to the existing <cite>notes</cite> list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.add_subtitle">
+<code class="sig-name descname">add_subtitle</code><span class="sig-paren">(</span><em class="sig-param">new_subtitle</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.add_subtitle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a single subtitle to the existing list of <cite>subtitles</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_additional_formatting">
+<code class="sig-name descname">set_additional_formatting</code><span class="sig-paren">(</span><em class="sig-param">new_formatting</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_additional_formatting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a dictionary of additional formatting to be applied to this table.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_annotations">
+<code class="sig-name descname">set_annotations</code><span class="sig-paren">(</span><em class="sig-param">new_annotations</em>, <em class="sig-param">overwrite=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_annotations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a list of notes to the <cite>annotations</cite> attribute. Overwrites existing
+<cite>annotations</cite> dict by default. If overwrite is False, new entries are
+appended to the <cite>annotations</cite> dict.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_index_columns">
+<code class="sig-name descname">set_index_columns</code><span class="sig-paren">(</span><em class="sig-param">new_index_columns</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_index_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <cite>index_columns</cite> attribute. Overwrites any existing values.
+An dict must be supplied. This dict should map index level to a
+single 0-indexed column number. All other columns will be considered
+as data columns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_legend">
+<code class="sig-name descname">set_legend</code><span class="sig-paren">(</span><em class="sig-param">new_legend</em>, <em class="sig-param">overwrite=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_legend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a list of legend entries to the <cite>legend</cite> attribute. Overwrites
+existing legend entries by default. If overwrite is False, new entries
+are appended to the <cite>legend</cite> list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_notes">
+<code class="sig-name descname">set_notes</code><span class="sig-paren">(</span><em class="sig-param">new_notes</em>, <em class="sig-param">overwrite=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_notes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a list of notes to the <cite>notes</cite> attribute. Overwrites existing
+<cite>notes</cite> list by default.If overwrite is False, new entries are
+appended to the <cite>notes</cite> list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_scope">
+<code class="sig-name descname">set_scope</code><span class="sig-paren">(</span><em class="sig-param">new_scope</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_scope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <cite>scope</cite> attribute.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_source">
+<code class="sig-name descname">set_source</code><span class="sig-paren">(</span><em class="sig-param">new_source</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the source attribute to the specified str.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_subtitles">
+<code class="sig-name descname">set_subtitles</code><span class="sig-paren">(</span><em class="sig-param">new_subtitles</em>, <em class="sig-param">overwrite=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_subtitles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a list of subtitles to the <cite>subtitles</cite> attribute. Overwrites
+existing ist of subtitles by default. If <cite>overwrite</cite> is False, new list
+is appended to existing list of subtitles.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_table">
+<code class="sig-name descname">set_table</code><span class="sig-paren">(</span><em class="sig-param">new_table</em>, <em class="sig-param">new_index_columns=None</em>, <em class="sig-param">new_units=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <cite>table</cite>, <cite>index_columns</cite> and ‘units’ attributes. Overwrites
+existing values for these attributes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_title">
+<code class="sig-name descname">set_title</code><span class="sig-paren">(</span><em class="sig-param">new_title</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <cite>title</cite> attribute.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gptables.core.gptable.GPTable.set_units">
+<code class="sig-name descname">set_units</code><span class="sig-paren">(</span><em class="sig-param">new_units</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.gptable.GPTable.set_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <cite>units</cite> attribute using the supplied str, list or dictionary.
+Units supplied as a list must match the length of columng headings,
+excluding index columns. Units as a dict should be in the format
+{column: units_text}. Column can be column name or 0-indexed column
+number in <cite>table</cite>. Index columns cannot have units.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="doc.wrappers.html" class="btn btn-neutral float-right" title="4. gptables XlsxWriter wrappers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="doc.gptable.html" class="btn btn-neutral float-left" title="2. gptables Theme" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, David Foster, Alexander Newton
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
