@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gptables - a highly opinionated package for spreadsheet production &mdash; gptables 0.1.2 documentation</title>
+  <title>Good Practice Tables (gptables) &mdash; gptables 0.1.2 documentation</title>
   
 
   
@@ -135,7 +135,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>gptables - a highly opinionated package for spreadsheet production</li>
+      <li>Good Practice Tables (gptables)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -154,21 +154,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-gptables"></span><div class="section" id="gptables-a-highly-opinionated-package-for-spreadsheet-production">
-<h1>gptables - a highly opinionated package for spreadsheet production<a class="headerlink" href="#gptables-a-highly-opinionated-package-for-spreadsheet-production" title="Permalink to this headline">¶</a></h1>
+  <span class="target" id="module-gptables"></span><div class="section" id="good-practice-tables-gptables">
+<h1>Good Practice Tables (gptables)<a class="headerlink" href="#good-practice-tables-gptables" title="Permalink to this headline">¶</a></h1>
+<p>&lt;!– badges: start –&gt;</p>
+<a class="reference external image-reference" href="https://travis-ci.org/best-practice-and-impact/gptables"><img alt="Travis build status" src="https://travis-ci.org/best-practice-and-impact/gptables.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://badge.fury.io/py/gptables"><img alt="PyPI release" src="https://badge.fury.io/py/gptables.svg" /></a>
+<p>&lt;!– badges: end –&gt;</p>
+<div class="section" id="gptables-a-highly-opinionated-package-for-spreadsheet-production">
+<h2>gptables - a highly opinionated package for spreadsheet production<a class="headerlink" href="#gptables-a-highly-opinionated-package-for-spreadsheet-production" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> is a highly opinionated python package.
 It produces <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> files from your <code class="docutils literal notranslate"><span class="pre">pandas</span></code> dataframes or using
 <code class="docutils literal notranslate"><span class="pre">reticulate</span></code> in R. You define the mapping from your data to elements of the
 table. It does the rest.</p>
-<p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> uses the official <a class="reference external" href="https://gss.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/">guidance</a> on good practice spreadsheets.
+<p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> uses the official (guidance on good practice spreadsheets)[<a class="reference external" href="https://gss.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/">https://gss.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/</a>].
 It advocates a strong adherence to the guidance by restricting the range of operations possible.
-The default theme <code class="docutils literal notranslate"><span class="pre">gptheme</span></code> should accomodate most use cases.</p>
-<p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> is developed and maintained by the <a class="reference external" href="https://gss.civilservice.gov.uk/about-us/support-for-the-gss/">Best Practice and Impact</a> division of the Office for National Statistics, UK.</p>
+The default theme <code class="docutils literal notranslate"><span class="pre">gptheme</span></code> should accomodate most use cases.
+However, the <code class="docutils literal notranslate"><span class="pre">Theme</span></code> object allows development of custom themes, where other formatting is required.</p>
+<p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> is developed and maintained by the (<cite>Best Practice and Impact</cite>)[<a class="reference external" href="https://gss.civilservice.gov.uk/about-us/support-for-the-gss/">https://gss.civilservice.gov.uk/about-us/support-for-the-gss/</a>]
+division of the Office for National Statistics, UK.</p>
 <div class="section" id="main-features">
-<h2>Main Features<a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h2>
+<h3>Main Features<a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h3>
 <p>You define your mapping with your data as a <code class="docutils literal notranslate"><span class="pre">GPTable</span></code>.</p>
-<p>You define the format of your mapping with a <code class="docutils literal notranslate"><span class="pre">Theme</span></code>, the default is gptheme.</p>
+<p>You can define the format of your mapping with a <code class="docutils literal notranslate"><span class="pre">Theme</span></code>, or simply use the default - gptheme.</p>
 <p>You <code class="docutils literal notranslate"><span class="pre">write_workbook()</span></code> to win.</p>
+</div>
 </div>
 </div>
 <div class="toctree-wrapper compound">
