@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gptables.core.theme &#8212; gptables 0.2.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">gptables</a></h1>
+
+
+
+<p class="blurb">An opinionated python package for spreadsheet production.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=best-practice-and-impact&repo=gptables&type=watch&count=False&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.api.html">API functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.gptable.html">GPTable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.wrappers.html">XlsxWriter wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for gptables.core.theme</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">xlsxwriter.format</span> <span class="kn">import</span> <span class="n">Format</span>
+<span class="kn">from</span> <span class="nn">gptables.core.gptable</span> <span class="kn">import</span> <span class="n">GPTable</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">validate_single_format</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Decorator to validate that input is a dictionary dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">format_dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">actual_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Formats must be supplied as a dictionary, not&quot;</span>
+                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">actual_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            
+        <span class="k">for</span> <span class="n">fmt</span> <span class="ow">in</span> <span class="n">format_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_validate_format_label</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<div class="viewcode-block" id="Theme"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme">[docs]</a><span class="k">class</span> <span class="nc">Theme</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class that defines a set of format attributes for use in xlsxwriter.</span>
+
+<span class="sd">    This class associates a dict of format attributes with table elements.</span>
+
+<span class="sd">    See XlsxWriter</span>
+<span class="sd">    `format properties &lt;https://xlsxwriter.readthedocs.io/format.html#format-methods-and-format-properties&gt;`_</span>
+<span class="sd">    for valid options.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    title_format : dict</span>
+
+<span class="sd">    subtitle_format : dict</span>
+<span class="sd">    </span>
+<span class="sd">    scope_format : dict</span>
+<span class="sd">    </span>
+<span class="sd">    units_format : dict</span>
+
+<span class="sd">    column_heading_format : dict</span>
+<span class="sd">    </span>
+<span class="sd">    index_1_format : dict</span>
+<span class="sd">    </span>
+<span class="sd">    index_2_format : dict</span>
+<span class="sd">    </span>
+<span class="sd">    index_3_format : dict</span>
+<span class="sd">    </span>
+<span class="sd">    data_format : dict</span>
+
+<span class="sd">    source_format : dict</span>
+<span class="sd">    </span>
+<span class="sd">    legend_format : dict</span>
+<span class="sd">    </span>
+<span class="sd">    annotations_format : dict</span>
+<span class="sd">    </span>
+<span class="sd">    notes_format : dict</span>
+<span class="sd">    </span>
+<span class="sd">    footer_order : list</span>
+<span class="sd">    </span>
+<span class="sd">    missing_value : None or str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise theme object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : dict or .yaml/.yml file</span>
+<span class="sd">          theme specification</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">## Formats</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_format_attributes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;title_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;subtitle_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;scope_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;units_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;column_heading_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;index_1_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;index_2_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;index_3_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;data_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;source_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;legend_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;annotations_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;notes_format&quot;</span>
+            <span class="p">]</span>
+        
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_attributes</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="p">{})</span>
+        
+        <span class="c1">## Other attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">footer_order</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="c1"># Valid Them format attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_valid_attrs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_format&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_attributes</span>
+            <span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;global&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Valid XlsxWriter Format attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_valid_format_labels</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">attr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;set_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">Format</span><span class="p">()</span><span class="o">.</span><span class="fm">__dir__</span><span class="p">()</span> 
+                <span class="k">if</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;set_&#39;</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">Format</span><span class="p">(),</span> <span class="n">attr</span><span class="p">))</span>
+                <span class="p">]</span>
+            
+        <span class="k">if</span> <span class="n">config</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_parse_config</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse yaml configuration to dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;.yml&quot;</span><span class="p">,</span> <span class="s2">&quot;.yaml&quot;</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Theme configuration files must be YAML&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">cfg</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="n">config</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Theme configuration must be a dict or YAML file&quot;</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">cfg</span>
+
+
+    <span class="k">def</span> <span class="nf">_validate_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assert that format dictionary lower level keys are valid XlsxWriter</span>
+<span class="sd">        Format attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_attrs</span><span class="p">:</span>
+                <span class="n">attr_config</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="ow">or</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">fmt</span> <span class="ow">in</span> <span class="n">attr_config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_validate_format_label</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+     
+
+    <span class="k">def</span> <span class="nf">_validate_format_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assert that format is a valid XlsxWriter Format attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">format_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_format_labels</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{</span><span class="n">format_name</span><span class="si">}</span><span class="s2">` is not a valid format label&quot;</span><span class="p">)</span>
+    
+
+<div class="viewcode-block" id="Theme.apply_config"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.apply_config">[docs]</a>    <span class="k">def</span> <span class="nf">apply_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update multiple Theme attributes using a YAML or dictionary config.</span>
+<span class="sd">        This enables extension of build in Themes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_config</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+        
+        <span class="c1"># Update all when global used</span>
+        <span class="k">if</span> <span class="s2">&quot;global&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">default_format</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;global&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_all_formats</span><span class="p">(</span><span class="n">default_format</span><span class="p">)</span>
+        
+        <span class="c1"># Update with individual methods</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;footer_order&quot;</span><span class="p">,</span> <span class="s2">&quot;missing_value&quot;</span><span class="p">]:</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;update_&quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">)(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_attrs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;update_&quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_format&quot;</span><span class="p">)(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">` is not a valid Theme attribute&quot;</span><span class="p">)</span></div>
+    
+
+    <span class="k">def</span> <span class="nf">_update_all_formats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates all theme attributes with a global format dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_attributes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">attr</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_format&quot;</span><span class="p">):</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;update_&quot;</span> <span class="o">+</span> <span class="n">attr</span><span class="p">)(</span><span class="n">global_dict</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Theme.update_column_heading_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_column_heading_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_column_heading_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `column_heading_format` attribute. Where keys already exist,</span>
+<span class="sd">        existing items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">column_heading_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+    
+
+<div class="viewcode-block" id="Theme.update_index_1_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_index_1_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_index_1_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `index_1_format` attribute. Where keys already exist, existing</span>
+<span class="sd">        items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_1_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_index_2_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_index_2_format">[docs]</a>    <span class="nd">@validate_single_format</span>    
+    <span class="k">def</span> <span class="nf">update_index_2_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `index_2_format` attribute. Where keys already exist, existing</span>
+<span class="sd">        items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_2_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_index_3_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_index_3_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_index_3_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `index_3_format` attribute. Where keys already exist, existing</span>
+<span class="sd">        items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_3_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_data_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_data_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_data_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `data_format` attribute. Where keys already exist,</span>
+<span class="sd">        existing items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_title_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_title_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_title_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `title_format` attribute. Where keys already exist, existing</span>
+<span class="sd">        items are replaced..</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_subtitle_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_subtitle_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_subtitle_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `subtitle_format` attribute. Where keys already exist,</span>
+<span class="sd">        existing items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subtitle_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_scope_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_scope_format">[docs]</a>    <span class="nd">@validate_single_format</span>    
+    <span class="k">def</span> <span class="nf">update_scope_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `scope_format` attribute. Where keys already exist, existing</span>
+<span class="sd">        items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scope_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_location_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_location_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_location_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `location_format` attribute. Where keys already exist,</span>
+<span class="sd">        existing items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_units_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_units_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_units_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `units_format` attribute. Where keys already exist, existing</span>
+<span class="sd">        items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">units_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_source_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_source_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_source_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `source_format` attribute. Where keys already exist,</span>
+<span class="sd">        existing items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_legend_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_legend_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_legend_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `legend_format` attribute. Where keys already exist,</span>
+<span class="sd">        existing items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legend_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_annotations_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_annotations_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_annotations_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `annotations_format` attribute. Where keys already exist,</span>
+<span class="sd">        existing items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_notes_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_notes_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_notes_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `notes_format` attribute. Where keys already exist, existing</span>
+<span class="sd">        items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notes_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_footer_order"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_footer_order">[docs]</a>    <span class="k">def</span> <span class="nf">update_footer_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `footer_order` attribute. Overrides existing order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;`footer_order` must be a list of footer element names&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">valid_elements</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;legend&quot;</span><span class="p">,</span> <span class="s2">&quot;notes&quot;</span><span class="p">,</span> <span class="s2">&quot;annotations&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">element</span> <span class="ow">in</span> <span class="n">valid_elements</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">order_list</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;`footer_order` elements must be in </span><span class="si">{</span><span class="n">valid_elements</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">footer_order</span> <span class="o">=</span> <span class="n">order_list</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_missing_value"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_missing_value">[docs]</a>    <span class="k">def</span> <span class="nf">update_missing_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">missing_val_text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `missing_value` attribute. Overrides existing string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GPTable</span><span class="o">.</span><span class="n">_validate_text</span><span class="p">(</span><span class="n">missing_val_text</span><span class="p">,</span> <span class="s2">&quot;missing_value&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">missing_value</span> <span class="o">=</span> <span class="n">missing_val_text</span></div>
+
+
+<div class="viewcode-block" id="Theme.print_attributes"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.print_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">print_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print all current format attributes and values to the console.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">obj_attr</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">attr</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__dir__</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">))</span>
+                <span class="p">]</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">obj_attr</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">))</span></div>
+            
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Comparison operator, for testing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Theme</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="n">obj_attr</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">attr</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__dir__</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">))</span>
+                <span class="p">]</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">([</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="o">==</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">obj_attr</span>
+                <span class="p">])</span></div>
+        
+</pre></div>
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy; Crown Copyright.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

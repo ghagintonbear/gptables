@@ -1,0 +1,908 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gptables.core.wrappers &#8212; gptables 0.2.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">gptables</a></h1>
+
+
+
+<p class="blurb">An opinionated python package for spreadsheet production.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=best-practice-and-impact&repo=gptables&type=watch&count=False&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.api.html">API functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.gptable.html">GPTable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.wrappers.html">XlsxWriter wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for gptables.core.wrappers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">from</span> <span class="nn">xlsxwriter.workbook</span> <span class="kn">import</span> <span class="n">Workbook</span>
+<span class="kn">from</span> <span class="nn">xlsxwriter.worksheet</span> <span class="kn">import</span> <span class="n">Worksheet</span>
+
+<span class="kn">from</span> <span class="nn">.theme</span> <span class="kn">import</span> <span class="n">Theme</span>
+<span class="kn">from</span> <span class="nn">.gptable</span> <span class="kn">import</span> <span class="n">GPTable</span>
+<span class="kn">from</span> <span class="nn">gptables.utils.unpickle_themes</span> <span class="kn">import</span> <span class="n">gptheme</span>
+
+
+<div class="viewcode-block" id="GPWorksheet"><a class="viewcode-back" href="../../../doc.wrappers.html#gptables.core.wrappers.GPWorksheet">[docs]</a><span class="k">class</span> <span class="nc">GPWorksheet</span><span class="p">(</span><span class="n">Worksheet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper for an XlsxWriter Worksheet object. Provides a method for writing</span>
+<span class="sd">    a good practice table (GPTable) to a Worksheet.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">write_gptable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gptable</span><span class="p">,</span> <span class="n">auto_width</span><span class="p">,</span> <span class="n">disable_footer_parentheses</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write data from a GPTable object to the worksheet using the workbook</span>
+<span class="sd">        Theme object for formatting.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gptable : gptables.GPTable</span>
+<span class="sd">            object contianing elements of the gptable to be written to the</span>
+<span class="sd">            Worksheet</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gptable</span><span class="p">,</span> <span class="n">GPTable</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`gptable` must be a gptables.GPTable object&quot;</span><span class="p">)</span>
+        
+        <span class="n">gptable</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">gptable</span><span class="p">)</span>
+
+        <span class="n">theme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theme</span>
+
+        <span class="c1"># Write each GPTable element using appropriate Theme attr</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reference_annotations</span><span class="p">(</span><span class="n">gptable</span><span class="p">)</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span>
+                <span class="n">pos</span><span class="p">,</span>
+                <span class="n">gptable</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+                <span class="n">theme</span><span class="o">.</span><span class="n">title_format</span>
+                <span class="p">)</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element_list</span><span class="p">(</span>
+                <span class="n">pos</span><span class="p">,</span>
+                <span class="n">gptable</span><span class="o">.</span><span class="n">subtitles</span><span class="p">,</span>
+                <span class="n">theme</span><span class="o">.</span><span class="n">subtitle_format</span>
+                <span class="p">)</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_table_elements</span><span class="p">(</span>
+                <span class="n">pos</span><span class="p">,</span>
+                <span class="n">gptable</span><span class="p">,</span>
+                <span class="n">auto_width</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">disable_footer_parentheses</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_enclose_footer_elements</span><span class="p">(</span><span class="n">gptable</span><span class="p">)</span>
+
+        <span class="n">footer</span> <span class="o">=</span> <span class="n">theme</span><span class="o">.</span><span class="n">footer_order</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">footer</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_write_&quot;</span> <span class="o">+</span> <span class="n">element</span><span class="p">)(</span>
+                    <span class="n">pos</span><span class="p">,</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="n">gptable</span><span class="p">,</span> <span class="n">element</span><span class="p">),</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="n">theme</span><span class="p">,</span> <span class="n">element</span> <span class="o">+</span> <span class="s2">&quot;_format&quot;</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_reference_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gptable</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replace note references with numbered references. Acts on `title`,</span>
+<span class="sd">        `subtitles`, `table` and `notes` attributes of a GPTable. References </span>
+<span class="sd">        are numbered from top left of spreadsheet, working across each row.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gptable : gptables.GPTable</span>
+<span class="sd">            object containing data with references to notes</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;subtitles&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;scope&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;units&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;legend&quot;</span>
+                <span class="p">]</span>
+        <span class="c1"># Store annotation references in order detected</span>
+        <span class="n">ordered_refs</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># Loop through elements, replacing references in strings</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+            <span class="n">attr_current</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">gptable</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span>
+                    <span class="n">gptable</span><span class="p">,</span>
+                    <span class="n">attr</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_replace_reference_in_attr</span><span class="p">(</span>
+                            <span class="n">attr_current</span><span class="p">,</span>
+                            <span class="n">ordered_refs</span>
+                            <span class="p">)</span>
+                    <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reference_table_annotations</span><span class="p">(</span><span class="n">gptable</span><span class="p">,</span> <span class="n">ordered_refs</span><span class="p">)</span>
+
+        <span class="n">new_annotations</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># Add to dict in order</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ordered_refs</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">new_annotations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                        <span class="p">{</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span> <span class="n">gptable</span><span class="o">.</span><span class="n">annotations</span><span class="p">[</span><span class="n">ordered_refs</span><span class="p">[</span><span class="n">n</span><span class="p">]]}</span>
+                        <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{</span><span class="n">ordered_refs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="si">}</span><span class="s2">` has been referenced, but is not&quot;</span>
+                       <span class="s2">&quot; defined in GPTable.annotations&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="c1"># Warn if all annotations not referenced</span>
+        <span class="n">annotations_diff</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gptable</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_annotations</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">annotations_diff</span><span class="p">:</span>
+            <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workbook</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: </span><span class="si">{</span><span class="n">annotations_diff</span><span class="si">}</span><span class="s2"> annotations have not been&quot;</span>
+                  <span class="sa">f</span><span class="s2">&quot; referenced in </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">. These annotations are not&quot;</span>
+                  <span class="s2">&quot; displayed. Use `notes` for notes without references.&quot;</span><span class="p">)</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="c1"># Replace old notes refs</span>
+        <span class="n">gptable</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">new_annotations</span>
+        
+
+    <span class="k">def</span> <span class="nf">_reference_table_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gptable</span><span class="p">,</span> <span class="n">ordered_refs</span><span class="p">):</span>
+         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         Reference annotations in the table column headings and index columns.</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+         <span class="n">table</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">gptable</span><span class="p">,</span> <span class="s2">&quot;table&quot;</span><span class="p">)</span>
+         
+         <span class="n">table</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replace_reference_in_attr</span><span class="p">(</span>
+                 <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="p">],</span>
+                 <span class="n">ordered_refs</span>
+                 <span class="p">)</span>
+         
+         <span class="n">index_columns</span> <span class="o">=</span> <span class="n">gptable</span><span class="o">.</span><span class="n">index_columns</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+         
+         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">index_columns</span><span class="p">:</span>
+             <span class="n">table</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                     <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replace_reference_in_attr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ordered_refs</span><span class="p">)</span>
+                     <span class="p">)</span>
+
+         <span class="nb">setattr</span><span class="p">(</span><span class="n">gptable</span><span class="p">,</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_replace_reference_in_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ordered_refs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replaces references in a string or list/dict of strings. Works</span>
+<span class="sd">        recursively on list elements and dict values. Other types are returned</span>
+<span class="sd">        without modification. Updates `ordered_refs` with newly detected</span>
+<span class="sd">        references.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : any type</span>
+<span class="sd">            object containing strings to replace references in</span>
+<span class="sd">        ordered_refs : list</span>
+<span class="sd">            list of references used so far. New references will be added to</span>
+<span class="sd">            this list in order of detection</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        string : str</span>
+<span class="sd">            input string with references replaced with numerical reference (n),</span>
+<span class="sd">            where n is the order of appearence in the resulting document</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replace_reference</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ordered_refs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replace_reference_in_attr</span><span class="p">(</span>
+                        <span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                        <span class="n">ordered_refs</span>
+                        <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replace_reference_in_attr</span><span class="p">(</span>
+                        <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+                        <span class="n">ordered_refs</span>
+                        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+    
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_replace_reference</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">ordered_refs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a single string, record occurences of new references (denoted by</span>
+<span class="sd">        flanking dollar signs [$$reference$$]) and replace with number</span>
+<span class="sd">        reference reflecting order of detection.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        string : str</span>
+<span class="sd">            the string to replace references within</span>
+<span class="sd">        ordered_refs : list</span>
+<span class="sd">            list of references used so far. New references will be added to</span>
+<span class="sd">            this list in order of detection</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        string : str</span>
+<span class="sd">            input string with references replaced with numerical reference (n),</span>
+<span class="sd">            where n is the order of appearence in the resulting document</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text_refs</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[$]</span><span class="si">{2}</span><span class="s2">.*?[$]</span><span class="si">{2}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>
+        <span class="n">dict_refs</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">text_refs</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dict_refs</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">dict_refs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ordered_refs</span><span class="p">:</span>
+                <span class="n">ordered_refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dict_refs</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="n">num_ref</span> <span class="o">=</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ordered_refs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">dict_refs</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">text_refs</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">num_ref</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">string</span>
+
+
+    <span class="k">def</span> <span class="nf">_enclose_footer_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gptable</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Flank text footer elements with parentheses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gptable</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enclose_text</span><span class="p">(</span><span class="n">gptable</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
+        <span class="n">gptable</span><span class="o">.</span><span class="n">notes</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_enclose_text</span><span class="p">(</span><span class="n">note</span><span class="p">)</span> <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">gptable</span><span class="o">.</span><span class="n">notes</span><span class="p">]</span>
+        <span class="n">gptable</span><span class="o">.</span><span class="n">legend</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_enclose_text</span><span class="p">(</span><span class="n">symbol</span><span class="p">)</span> <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">gptable</span><span class="o">.</span><span class="n">legend</span>
+            <span class="p">]</span>
+        <span class="n">gptable</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="p">[(</span><span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">v</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">gptable</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+            <span class="p">)</span>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_enclose_text</span><span class="p">(</span><span class="n">element</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Enclose text within parentheses. Handles strings and lists</span>
+<span class="sd">        (rich strings).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span>  <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="n">element</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;(&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">element</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;)&quot;</span><span class="p">]</span>
+
+
+    <span class="k">def</span> <span class="nf">_write_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write a single text element of a GPTable to the GPWorksheet.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element : str or list</span>
+<span class="sd">            the string or list of rich string elements to be written</span>
+<span class="sd">        format_dict : dict</span>
+<span class="sd">            format to be applied to string</span>
+<span class="sd">        pos : tuple</span>
+<span class="sd">            the position of the worksheet cell to write the element to</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pos : list</span>
+<span class="sd">            new position to write next element from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">element</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_smart_write</span><span class="p">(</span><span class="o">*</span><span class="n">pos</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">)</span>
+            <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">return</span> <span class="n">pos</span>       
+
+
+    <span class="k">def</span> <span class="nf">_write_element_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">element_list</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes a list of elements row-wise.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_list : list</span>
+<span class="sd">            list of strings or nested list of rich string elements to write,</span>
+<span class="sd">            one per row</span>
+<span class="sd">        format_dict : dict</span>
+<span class="sd">            format to be applied to string</span>
+<span class="sd">        pos : tuple</span>
+<span class="sd">            the position of the worksheet cell to write the elements to</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pos: list</span>
+<span class="sd">            new position to write next element from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">element_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">element_list</span><span class="p">:</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">pos</span>
+
+
+    <span class="k">def</span> <span class="nf">_write_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Alias for writting footer elements by name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_write_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">element_list</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Alias for writting footer elements by name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element_list</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">element_list</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_write_notes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">element_list</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Alias for writting footer elements by name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element_list</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">element_list</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_write_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">annotations_dict</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes a list of ordered annotations row-wise.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        notes_dict : dict</span>
+<span class="sd">            note associate with each references, as {reference: note}</span>
+<span class="sd">        format_dict : dict</span>
+<span class="sd">            format to be applied to string</span>
+<span class="sd">        pos : tuple</span>
+<span class="sd">            the position of the worksheet cell to write the elements to</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pos: list</span>
+<span class="sd">            new position to write next element from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ref</span><span class="p">,</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">annotations_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">element</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ref</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">annotation</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pos</span>
+
+
+    <span class="k">def</span> <span class="nf">_write_table_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">gptable</span><span class="p">,</span> <span class="n">auto_width</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes the table, scope and units elements of a GPTable. Uses the</span>
+<span class="sd">        Workbook Theme, plus any additional formatting associated with the</span>
+<span class="sd">        GPTable. Also replaces `np.nan` with the missing value marker.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gptable : gptables.GPTable</span>
+<span class="sd">            object containing the table and additional formatting data</span>
+<span class="sd">        pos : tuple</span>
+<span class="sd">            the position of the worksheet cell to write the units to</span>
+<span class="sd">        auto_width : bool</span>
+<span class="sd">            select if column widths should be determined automatically using</span>
+<span class="sd">            length of text in index and columns</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pos : list</span>
+<span class="sd">            new position to write next element from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get theme</span>
+        <span class="n">theme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theme</span>
+        
+        <span class="c1"># Write scope</span>
+        <span class="n">scope</span> <span class="o">=</span> <span class="n">gptable</span><span class="o">.</span><span class="n">scope</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_smart_write</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">pos</span><span class="p">,</span>
+                <span class="n">scope</span><span class="p">,</span>
+                <span class="n">theme</span><span class="o">.</span><span class="n">scope_format</span>
+                <span class="p">)</span>
+        
+        <span class="c1"># Write units above each col heading</span>
+        <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gptable</span><span class="o">.</span><span class="n">index_levels</span>
+        <span class="n">n_cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gptable</span><span class="o">.</span><span class="n">_column_headings</span><span class="p">)</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="n">gptable</span><span class="o">.</span><span class="n">units</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">units</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">n_cols</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_smart_write</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">pos</span><span class="p">,</span>
+                <span class="n">units</span><span class="p">,</span>
+                <span class="n">theme</span><span class="o">.</span><span class="n">units_format</span>
+                <span class="p">)</span>
+            <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">units</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cols</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_smart_write</span><span class="p">(</span>
+                    <span class="o">*</span><span class="n">pos</span><span class="p">,</span>
+                    <span class="n">units</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                    <span class="n">theme</span><span class="o">.</span><span class="n">units_format</span>
+                    <span class="p">)</span>
+                <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="c1"># Reset position to left col on next row</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">units</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">scope</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="c1">## Create data array</span>
+        <span class="n">index_levels</span> <span class="o">=</span> <span class="n">gptable</span><span class="o">.</span><span class="n">index_levels</span>
+        <span class="n">index_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">gptable</span><span class="o">.</span><span class="n">index_columns</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">gptable</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+        <span class="c1"># Create row containing column headings</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_columns</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># Delete index col headings</span>
+        
+        <span class="c1">## Create formats array</span>
+        <span class="c1"># pandas.DataFrame did NOT want to hold dictionaries, so be wary</span>
+        <span class="n">formats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span><span class="o">.</span><span class="n">reindex_like</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">dict_row</span> <span class="o">=</span> <span class="p">[{}</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">formats</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">formats</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">dict_row</span> <span class="o">=</span> <span class="p">[{}</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">formats</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+            <span class="n">formats</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">dict_row</span>
+        
+        
+        <span class="c1">## Handle missing values</span>
+        <span class="n">missing_marker</span> <span class="o">=</span> <span class="n">theme</span><span class="o">.</span><span class="n">missing_value</span>
+
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">missing_marker</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Super inefficient format update loop</span>
+                <span class="c1"># Only run if align not set for data</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;align&quot;</span> <span class="ow">in</span> <span class="n">theme</span><span class="o">.</span><span class="n">data_format</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+                    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]):</span>
+                                <span class="p">(</span><span class="n">formats</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span>
+                                <span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;align&quot;</span><span class="p">:</span><span class="s2">&quot;center&quot;</span><span class="p">})</span>
+                                <span class="p">)</span>
+
+                <span class="n">data</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">missing_marker</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">gptable</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">missing_marker</span><span class="si">}</span><span class="s2"> not available&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;`Theme.missing_marker` must be assigned if values are&quot;</span>
+                       <span class="s2">&quot; missing within GPTable.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        
+        
+        <span class="c1">## Add Theme formatting to formats dataframe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_apply_format</span><span class="p">(</span>
+                <span class="n">formats</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_levels</span><span class="p">:],</span>
+                <span class="n">theme</span><span class="o">.</span><span class="n">column_heading_format</span>
+                <span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_apply_format</span><span class="p">(</span>
+                <span class="n">formats</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="n">index_levels</span><span class="p">:],</span>
+                <span class="n">theme</span><span class="o">.</span><span class="n">data_format</span>
+                <span class="p">)</span>
+        
+        <span class="n">index_level_formats</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">theme</span><span class="o">.</span><span class="n">index_1_format</span><span class="p">,</span>
+                <span class="n">theme</span><span class="o">.</span><span class="n">index_2_format</span><span class="p">,</span>
+                <span class="n">theme</span><span class="o">.</span><span class="n">index_3_format</span>
+                <span class="p">]</span>
+        <span class="k">for</span> <span class="n">level</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">gptable</span><span class="o">.</span><span class="n">index_columns</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_apply_format</span><span class="p">(</span>
+                <span class="n">formats</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="n">col</span><span class="p">],</span>
+                <span class="n">index_level_formats</span><span class="p">[</span><span class="n">level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># Account for 0-indexing</span>
+                <span class="p">)</span>
+        
+        <span class="c1">## Add additional table-specific formatting from GPTable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_apply_additional_formatting</span><span class="p">(</span>
+                <span class="n">formats</span><span class="p">,</span>
+                <span class="n">gptable</span><span class="o">.</span><span class="n">additional_formatting</span><span class="p">,</span>
+                <span class="n">gptable</span><span class="o">.</span><span class="n">index_levels</span>
+                <span class="p">)</span>
+        
+        <span class="c1">## Write table</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_array</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">formats</span><span class="p">)</span>
+
+        <span class="c1">## Set columns widths</span>
+        <span class="k">if</span> <span class="n">auto_width</span><span class="p">:</span>
+            <span class="n">widths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_column_widths</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">formats</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_column_widths</span><span class="p">(</span><span class="n">widths</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">pos</span>
+
+    
+    <span class="k">def</span> <span class="nf">_apply_additional_formatting</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">formats_table</span><span class="p">,</span>
+            <span class="n">additional_formatting</span><span class="p">,</span>
+            <span class="n">index_levels</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply row, column and cell formatting to dataframe of formats.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">additional_formatting</span><span class="p">:</span>
+            <span class="n">fmt_type</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">format_desc</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="n">fmt_type</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">fmt_type</span> <span class="o">==</span> <span class="s2">&quot;cell&quot;</span><span class="p">:</span>
+                <span class="n">formatting</span> <span class="o">=</span> <span class="n">format_desc</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+                <span class="n">cell_ilocs</span> <span class="o">=</span> <span class="n">format_desc</span><span class="p">[</span><span class="s2">&quot;cells&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cell_ilocs</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="n">cell_ilocs</span> <span class="o">=</span> <span class="p">[</span><span class="n">cell_ilocs</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cell_ilocs</span><span class="p">:</span>
+                    <span class="n">formats_table_slice</span> <span class="o">=</span> <span class="n">formats_table</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span>
+                    
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_apply_format</span><span class="p">(</span>
+                        <span class="n">formats_table_slice</span><span class="p">,</span>
+                        <span class="n">formatting</span>
+                        <span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            
+            <span class="k">if</span> <span class="n">fmt_type</span> <span class="o">==</span> <span class="s2">&quot;column&quot;</span><span class="p">:</span>
+                <span class="n">cols_iloc</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">formats_table</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+                        <span class="k">else</span> <span class="n">col</span>
+                        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">format_desc</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span>
+                        <span class="p">]</span>
+                <span class="n">row_start</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="s2">&quot;include_names&quot;</span> <span class="ow">in</span> <span class="n">format_desc</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">row_start</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">format_desc</span><span class="p">[</span><span class="s2">&quot;include_names&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="mi">1</span>
+    
+                <span class="n">formats_table_slice</span> <span class="o">=</span> <span class="n">formats_table</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row_start</span><span class="p">:,</span> <span class="n">cols_iloc</span><span class="p">]</span>
+                <span class="n">formatting</span> <span class="o">=</span> <span class="n">format_desc</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+
+            <span class="k">elif</span> <span class="n">fmt_type</span> <span class="o">==</span> <span class="s2">&quot;row&quot;</span><span class="p">:</span>
+                <span class="n">rows_iloc</span> <span class="o">=</span> <span class="n">format_desc</span><span class="p">[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span>
+                <span class="n">col_start</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="s2">&quot;include_names&quot;</span> <span class="ow">in</span> <span class="n">format_desc</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">col_start</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">format_desc</span><span class="p">[</span><span class="s2">&quot;include_names&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="n">index_levels</span>
+    
+                <span class="n">formats_table_slice</span> <span class="o">=</span> <span class="n">formats_table</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rows_iloc</span><span class="p">,</span> <span class="n">col_start</span><span class="p">:]</span>
+                <span class="n">formatting</span> <span class="o">=</span> <span class="n">format_desc</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">_apply_format</span><span class="p">(</span>
+                <span class="n">formats_table_slice</span><span class="p">,</span>
+                <span class="n">formatting</span>
+                <span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_write_array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">formats</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write a two-dimensional array to the current Worksheet, starting from</span>
+<span class="sd">        the specified position.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : pandas.DataFrame</span>
+<span class="sd">            array of data to be written to Worksheet</span>
+<span class="sd">        formats : pandas.DataFrame</span>
+<span class="sd">            array of dictionaries that specify the formatting to be applied</span>
+<span class="sd">            to each cell of data</span>
+<span class="sd">        pos : tuple</span>
+<span class="sd">            the position of the top left cell to start writing the array from</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pos : list</span>
+<span class="sd">            new position to write next element from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">formats</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;data and formats arrays must be of equal shape&quot;</span><span class="p">)</span>
+        
+        <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+                <span class="n">cell_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span>
+                <span class="n">cell_format_dict</span> <span class="o">=</span> <span class="n">formats</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">_smart_write</span><span class="p">(</span>
+                        <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">row</span><span class="p">,</span>
+                        <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">col</span><span class="p">,</span>
+                        <span class="n">cell_data</span><span class="p">,</span>
+                        <span class="n">cell_format_dict</span>
+                        <span class="p">)</span>
+        
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">rows</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        
+        <span class="k">return</span> <span class="n">pos</span>
+        
+
+    <span class="k">def</span> <span class="nf">_smart_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Depending on the input data, this function will write rich strings or</span>
+<span class="sd">        use the standard `write()` method. For rich strings, the base format is</span>
+<span class="sd">        merged with each rich format supplied within data.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        row : int</span>
+<span class="sd">            0-indexed row of cell to write to</span>
+<span class="sd">        col : int</span>
+<span class="sd">            0-indexed column of cell to write to</span>
+<span class="sd">        data : str or list</span>
+<span class="sd">            Simple string to be written with `format_dict` formatting. Or a</span>
+<span class="sd">            list of alternating string and dictionary objects. Dictionaries</span>
+<span class="sd">            specify additional formatting to be applied to the following string</span>
+<span class="sd">            in the list.</span>
+<span class="sd">        format_dict : dict</span>
+<span class="sd">            Dictionary containing base format for the string.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workbook</span>  <span class="c1"># Reference to Workbook that contains sheet</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># At this point, any list should be a rich-text element</span>
+            <span class="n">data_with_formats</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="c1"># Convert dicts to Format (with merge onto base format)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">rich_format</span> <span class="o">=</span> <span class="n">format_dict</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">rich_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> 
+                    <span class="n">data_with_formats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wb</span><span class="o">.</span><span class="n">add_format</span><span class="p">(</span><span class="n">rich_format</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">data_with_formats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">data_with_formats</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wb</span><span class="o">.</span><span class="n">add_format</span><span class="p">(</span><span class="n">format_dict</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_rich_string</span><span class="p">(</span><span class="n">row</span><span class="p">,</span>
+                                   <span class="n">col</span><span class="p">,</span>
+                                   <span class="o">*</span><span class="n">data_with_formats</span><span class="p">,</span>
+                                   <span class="n">wb</span><span class="o">.</span><span class="n">add_format</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span>
+                                   <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Write handles all other write types dynamically</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                    <span class="n">row</span><span class="p">,</span>
+                    <span class="n">col</span><span class="p">,</span>
+                    <span class="n">data</span><span class="p">,</span>
+                    <span class="n">wb</span><span class="o">.</span><span class="n">add_format</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_apply_format</span><span class="p">(</span><span class="n">format_table_slice</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update all cells of a given dataframe slice with the format</span>
+<span class="sd">        dictionary. Handles dict, series or dataframes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">format_table_slice</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+            <span class="p">(</span><span class="n">format_table_slice</span>
+             <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">))</span>
+             <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">format_table_slice</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="c1"># Vectorised for 2D</span>
+            <span class="p">(</span><span class="n">format_table_slice</span>
+             <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)))</span>
+             <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">format_table_slice</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">format_table_slice</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_set_column_widths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widths</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the column widths using a list of widths.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">col_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">widths</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_column</span><span class="p">(</span>
+                <span class="n">col_number</span><span class="p">,</span>
+                <span class="n">col_number</span><span class="p">,</span>
+                <span class="n">widths</span><span class="p">[</span><span class="n">col_number</span><span class="p">]</span>
+            <span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_calculate_column_widths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">formats_table</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate Excel column widths using maximum length of strings</span>
+<span class="sd">        and the maxium font size in each column of the data table.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table : pd.DataFrame</span>
+<span class="sd">            data table to calculate widths from</span>
+<span class="sd">        formats_table: pd.DataFrame</span>
+<span class="sd">            formats table to retrieve font size from</span>
+
+<span class="sd">        Returns </span>
+<span class="sd">        -------</span>
+<span class="sd">        col_widths : list</span>
+<span class="sd">            width to apply to Excel columns</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">max_lengths</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="n">max_font_sizes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">formats_table</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">col</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;font_size&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="n">col_widths</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_excel_string_width</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">max_lengths</span><span class="p">,</span> <span class="n">max_font_sizes</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">col_widths</span>
+
+        
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_excel_string_width</span><span class="p">(</span><span class="n">string_len</span><span class="p">,</span> <span class="n">font_size</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the rough length of a string in Excel character units.</span>
+<span class="sd">        This crude estimate does not account for font name or other font format</span>
+<span class="sd">        (e.g. wrapping).</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        string_len : int</span>
+<span class="sd">            length of string to calculate width in Excel for</span>
+<span class="sd">        font_size : int</span>
+<span class="sd">            size of font</span>
+<span class="sd">        </span>
+<span class="sd">        Returns </span>
+<span class="sd">        -------</span>
+<span class="sd">        excel_width : float</span>
+<span class="sd">            width of equivalent string in Excel</span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        <span class="k">if</span> <span class="n">string_len</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">excel_width</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">excel_width</span> <span class="o">=</span> <span class="n">string_len</span> <span class="o">*</span> <span class="p">((</span><span class="n">font_size</span> <span class="o">*</span> <span class="mf">0.12</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.09</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">excel_width</span></div>
+
+
+
+<div class="viewcode-block" id="GPWorkbook"><a class="viewcode-back" href="../../../doc.wrappers.html#gptables.core.wrappers.GPWorkbook">[docs]</a><span class="k">class</span> <span class="nc">GPWorkbook</span><span class="p">(</span><span class="n">Workbook</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper for and XlsxWriter Workbook object. The Worksheets class has been</span>
+<span class="sd">    replaced by an alternative with a method for writting GPTable objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GPWorkbook</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theme</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="c1"># Set default theme</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">gptheme</span><span class="p">)</span>
+        
+
+    <span class="k">def</span> <span class="nf">add_worksheet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overwrite add_worksheet() to create a GPWorksheet object.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str (optional)</span>
+<span class="sd">            name of the the worksheet to be created</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        worksheet : gptables.GPWorksheet</span>
+<span class="sd">            a worksheet object, which supports writing of GPTable objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">worksheet</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GPWorkbook</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">add_worksheet</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">GPWorksheet</span><span class="p">)</span>
+        <span class="n">worksheet</span><span class="o">.</span><span class="n">theme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theme</span>
+        <span class="n">worksheet</span><span class="o">.</span><span class="n">_workbook</span> <span class="o">=</span> <span class="bp">self</span>  <span class="c1"># Create reference to wb, for formatting</span>
+        <span class="n">worksheet</span><span class="o">.</span><span class="n">hide_gridlines</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">worksheet</span>
+
+
+    <span class="k">def</span> <span class="nf">set_theme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theme</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the theme for all GPTable objects written to the Workbook.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        theme : gptables.Theme</span>
+<span class="sd">            a Theme object containing the formatting to be applied to GPTable</span>
+<span class="sd">            objects written to Worksheets within this Workbook</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">theme</span><span class="p">,</span> <span class="n">Theme</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`theme` must be a gptables.Theme object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theme</span> <span class="o">=</span> <span class="n">theme</span></div>
+</pre></div>
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy; Crown Copyright.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

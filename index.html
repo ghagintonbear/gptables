@@ -1,251 +1,144 @@
 
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Good Practice Tables (gptables) &mdash; gptables 0.1.3 documentation</title>
-  
 
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Practice Tables (gptables) &#8212; gptables 0.2.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="gptables API functions" href="doc.api.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
+    <link rel="next" title="API functions" href="doc.api.html" />
    
-  <div class="wy-grid-for-nav">
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
     
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">gptables</a></h1>
 
-          
-            <a href="#" class="icon icon-home"> gptables
-          
 
-          
-          </a>
 
-          
-            
-            
-          
+<p class="blurb">An opinionated python package for spreadsheet production.</p>
 
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=best-practice-and-impact&repo=gptables&type=watch&count=False&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="doc.api.html">API functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.gptable.html">GPTable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">XlsxWriter wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="doc.api.html" title="next chapter">API functions</a></li>
+  </ul></li>
+</ul>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Package Documentation:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="doc.api.html">gptables API functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.gptable.html">gptables Theme</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.theme.html">gptables GPTable</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">gptables XlsxWriter wrappers</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Package Usage:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="use.api.html">gptables API usage</a></li>
-</ul>
-
-            
-          
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">gptables</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
+      <div class="documentwrapper">
+        <div class="bodywrapper">
           
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="#">Docs</a> &raquo;</li>
-        
-      <li>Good Practice Tables (gptables)</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
+          <div class="body" role="main">
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <span class="target" id="module-gptables"></span><div class="section" id="good-practice-tables-gptables">
+  <div class="section" id="good-practice-tables-gptables">
 <h1>Good Practice Tables (gptables)<a class="headerlink" href="#good-practice-tables-gptables" title="Permalink to this headline">¶</a></h1>
-<p>&lt;!– badges: start –&gt;</p>
 <a class="reference external image-reference" href="https://travis-ci.org/best-practice-and-impact/gptables"><img alt="Travis build status" src="https://travis-ci.org/best-practice-and-impact/gptables.svg?branch=master" /></a>
 <a class="reference external image-reference" href="https://badge.fury.io/py/gptables"><img alt="PyPI release" src="https://badge.fury.io/py/gptables.svg" /></a>
-<p>&lt;!– badges: end –&gt;</p>
-<div class="section" id="gptables-a-highly-opinionated-package-for-spreadsheet-production">
-<h2>gptables - a highly opinionated package for spreadsheet production<a class="headerlink" href="#gptables-a-highly-opinionated-package-for-spreadsheet-production" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> is a highly opinionated python package.
-It produces <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> files from your <code class="docutils literal notranslate"><span class="pre">pandas</span></code> dataframes or using
-<code class="docutils literal notranslate"><span class="pre">reticulate</span></code> in R. You define the mapping from your data to elements of the
-table. It does the rest.</p>
-<p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> uses the official (guidance on good practice spreadsheets)[<a class="reference external" href="https://gss.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/">https://gss.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/</a>].
-It advocates a strong adherence to the guidance by restricting the range of operations possible.
-The default theme <code class="docutils literal notranslate"><span class="pre">gptheme</span></code> should accomodate most use cases.
-However, the <code class="docutils literal notranslate"><span class="pre">Theme</span></code> object allows development of custom themes, where other formatting is required.</p>
-<p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> is developed and maintained by the (<cite>Best Practice and Impact</cite>)[<a class="reference external" href="https://gss.civilservice.gov.uk/about-us/support-for-the-gss/">https://gss.civilservice.gov.uk/about-us/support-for-the-gss/</a>]
+<p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> produces <cite>.xlsx</cite> files from your <code class="docutils literal notranslate"><span class="pre">pandas</span></code> dataframes in
+either python or R (using <a class="reference external" href="https://rstudio.github.io/reticulate/">reticulate</a>). You define the mapping from your
+data to elements of the table and <code class="docutils literal notranslate"><span class="pre">gptables</span></code> does the rest.</p>
+<p>Table element mapping:</p>
+<div class="align-center figure align-default">
+<img alt="_images/table_mapping.png" src="_images/table_mapping.png" />
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> uses the official <a class="reference external" href="https://gss.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/">guidance on good practice spreadsheets</a>
+It advocates a strong adherence to the guidance by restricting the range of possible operations.
+The default formatting theme <code class="docutils literal notranslate"><span class="pre">gptheme</span></code> accomodates many use cases.
+However, the <a class="reference internal" href="doc.theme.html#gptables.core.theme.Theme" title="gptables.core.theme.Theme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theme</span></code></a> Class allows development of custom themes, where alternative formatting is required.</p>
+<p><code class="docutils literal notranslate"><span class="pre">gptables</span></code> is developed and maintained by the <a class="reference external" href="https://gss.civilservice.gov.uk/about-us/support-for-the-gss/">Best Practice and Impact</a>
 division of the Office for National Statistics, UK.</p>
-<div class="section" id="main-features">
-<h3>Main Features<a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h3>
-<p>You define your mapping with your data as a <code class="docutils literal notranslate"><span class="pre">GPTable</span></code>.</p>
-<p>You can define the format of your mapping with a <code class="docutils literal notranslate"><span class="pre">Theme</span></code>, or simply use the default - gptheme.</p>
-<p>You <code class="docutils literal notranslate"><span class="pre">write_workbook()</span></code> to win.</p>
-</div>
-</div>
-</div>
+<div class="section" id="simple-steps">
+<h2>3 Simple Steps<a class="headerlink" href="#simple-steps" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>You map your data to the elements of a <a class="reference internal" href="doc.gptable.html#gptables.core.gptable.GPTable" title="gptables.core.gptable.GPTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">GPTable</span></code></a>.</p></li>
+<li><p>You can define the format of each elements with a custom <a class="reference internal" href="doc.theme.html#gptables.core.theme.Theme" title="gptables.core.theme.Theme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Theme</span></code></a>, or simply use the default - gptheme.</p></li>
+<li><p>You <a class="reference internal" href="doc.api.html#gptables.core.api.write_workbook" title="gptables.core.api.write_workbook"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_workbook()</span></code></a> to win.</p></li>
+</ol>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Package Documentation:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="doc.api.html">gptables API functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="doc.changelog.html#unreleased">Unreleased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="doc.changelog.html#released-master">Released (master)</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="doc.gptable.html">gptables Theme</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.theme.html">gptables GPTable</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">gptables XlsxWriter wrappers</a></li>
-</ul>
 </div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Package Usage:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="use.api.html">gptables API usage</a></li>
-</ul>
+</div>
 </div>
 
 
-           </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="doc.api.html" class="btn btn-neutral float-right" title="gptables API functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-    </div>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2020, David Foster, Alexander Newton
-
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          <a href="doc.api.html" title="Next document">API functions</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
         </div>
       </div>
-
-    </section>
-
+    <div class="clearer"></div>
   </div>
-  
+    <div class="footer">
+      &copy; Crown Copyright.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
 
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
     
-   
 
-</body>
+    
+  </body>
 </html>

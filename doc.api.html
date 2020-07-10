@@ -1,201 +1,119 @@
 
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>gptables API functions &mdash; gptables 0.1.3 documentation</title>
-  
 
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API functions &#8212; gptables 0.2.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Changelog" href="doc.changelog.html" />
-    <link rel="prev" title="Good Practice Tables (gptables)" href="index.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
+    <link rel="next" title="Example Usage" href="usage.html" />
+    <link rel="prev" title="Good Practice Tables (gptables)" href="index.html" />
    
-  <div class="wy-grid-for-nav">
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
     
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">gptables</a></h1>
 
-          
-            <a href="index.html" class="icon icon-home"> gptables
-          
 
-          
-          </a>
 
-          
-            
-            
-          
+<p class="blurb">An opinionated python package for spreadsheet production.</p>
 
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
 
-          
-        </div>
 
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Package Documentation:</span></p>
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=best-practice-and-impact&repo=gptables&type=watch&count=False&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">gptables API functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.gptable.html">gptables Theme</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.theme.html">gptables GPTable</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">gptables XlsxWriter wrappers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#write-workbook-function"><code class="docutils literal notranslate"><span class="pre">write_workbook</span></code> function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#produce-workbook-function"><code class="docutils literal notranslate"><span class="pre">produce_workbook</span></code> function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-and-dirty-workbook-function"><code class="docutils literal notranslate"><span class="pre">quick_and_dirty_workbook</span></code> function</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Package Usage:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="use.api.html">gptables API usage</a></li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.gptable.html">GPTable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">XlsxWriter wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Good Practice Tables (gptables)</a></li>
+      <li>Next: <a href="usage.html" title="next chapter">Example Usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">gptables</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
+      <div class="documentwrapper">
+        <div class="bodywrapper">
           
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>gptables API functions</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
+          <div class="body" role="main">
             
-            <a href="_sources/doc.api.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
+  <div class="section" id="api-functions">
+<h1>API functions<a class="headerlink" href="#api-functions" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">auto_width</span></code> functionality is experimental - any feedback is welcome!
+It currently does not account for alternative fonts, font sizes or font wrapping.</p>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="section" id="module-gptables.core.api">
-<span id="gptables-api-functions"></span><h1>gptables API functions<a class="headerlink" href="#module-gptables.core.api" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="gptables.core.api.produce_workbook">
-<code class="sig-prename descclassname">gptables.core.api.</code><code class="sig-name descname">produce_workbook</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">sheets</em>, <em class="sig-param">theme=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.api.produce_workbook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Produces a GPWorkbook.</p>
-<p>This is the main function that will take in data and theme information,
-It calls upon the packages to return a formatted <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> file, ready to
-be written using <cite>workbook.close()</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – Path to write final workbook to (an .xlsx file)</p></li>
-<li><p><strong>sheets</strong> (<em>dict</em>) – A dictionary mapping worksheet labels to gptables.GPTable objects</p></li>
-<li><p><strong>theme</strong> (<em>gptables.Theme</em><em> (</em><em>optional</em><em>)</em>) – The formatting to be applied tot GPTable elements. gptheme is used by
-default</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>workbook</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>gptables.GPWorkbook</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
+<div class="section" id="write-workbook-function">
+<h2><code class="docutils literal notranslate"><span class="pre">write_workbook</span></code> function<a class="headerlink" href="#write-workbook-function" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
 <dt id="gptables.core.api.write_workbook">
-<code class="sig-prename descclassname">gptables.core.api.</code><code class="sig-name descname">write_workbook</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">sheets</em>, <em class="sig-param">theme=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gptables.core.api.write_workbook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes a GPWorkbook to the specified file.</p>
+<code class="sig-prename descclassname">gptables.core.api.</code><code class="sig-name descname">write_workbook</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">sheets</span></em>, <em class="sig-param"><span class="n">theme</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">auto_width</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">disable_footer_parentheses</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gptables/core/api.html#write_workbook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gptables.core.api.write_workbook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes a GPWorkbook to the specified <cite>.xlsx</cite> file.</p>
 <p>This is an alternative main function that will take in data and theme
-information. It calls upon the packages to write a formatted <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>
+information. It calls upon the package to write a formatted <cite>.xlsx</cite>
 file to the specified path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – Path to write final workbook to (an .xlsx file)</p></li>
-<li><p><strong>sheets</strong> (<em>dict</em>) – A dictionary mapping worksheet labels to gptables.GPTable objects</p></li>
-<li><p><strong>theme</strong> (<em>gptables.Theme</em><em> (</em><em>optional</em><em>)</em>) – The formatting to be applied tot GPTable elements. gptheme is used by
+<li><p><strong>filename</strong> (<em>str</em>) – Path to write final workbook to (an <cite>.xlsx</cite> file)</p></li>
+<li><p><strong>sheets</strong> (<em>dict</em>) – mapping worksheet labels to <code class="docutils literal notranslate"><span class="pre">GPTable</span></code> objects</p></li>
+<li><p><strong>theme</strong> (<em>gptables.Theme</em><em>, </em><em>optional</em>) – formatting to be applied tot GPTable elements. <code class="docutils literal notranslate"><span class="pre">gptheme</span></code> is used by
 default</p></li>
+<li><p><strong>auto_width</strong> (<em>bool</em><em>, </em><em>optional</em>) – indicate if column widths should be automatically determined. False by default.</p></li>
+<li><p><strong>disable_footer_parentheses</strong> (<em>bool</em><em>, </em><em>optional</em>) – indicate if addition of parentheses to footer elements should be
+disabled. Note that disabling this decreases machine-readability.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -208,54 +126,101 @@ default</p></li>
 </dd></dl>
 
 </div>
+<div class="section" id="produce-workbook-function">
+<h2><code class="docutils literal notranslate"><span class="pre">produce_workbook</span></code> function<a class="headerlink" href="#produce-workbook-function" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="gptables.core.api.produce_workbook">
+<code class="sig-prename descclassname">gptables.core.api.</code><code class="sig-name descname">produce_workbook</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">sheets</span></em>, <em class="sig-param"><span class="n">theme</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">auto_width</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">disable_footer_parentheses</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gptables/core/api.html#produce_workbook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gptables.core.api.produce_workbook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produces a GPWorkbook, ready to be written to the specified <cite>.xlsx</cite> file
+using the <code class="docutils literal notranslate"><span class="pre">.close()</span></code> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – path to write final workbook to (an <cite>.xlsx</cite> file)</p></li>
+<li><p><strong>sheets</strong> (<em>dict</em>) – mapping worksheet labels to gptables.GPTable objects</p></li>
+<li><p><strong>theme</strong> (<em>gptables.Theme</em><em>, </em><em>optional</em><em>)</em>) – formatting to be applied tot GPTable elements. gptheme is used by
+default</p></li>
+<li><p><strong>auto_width</strong> (<em>bool</em><em>, </em><em>optional</em>) – indicate if column widths should be automatically determined. False
+by default.</p></li>
+<li><p><strong>disable_footer_parentheses</strong> (<em>bool</em><em>, </em><em>optional</em>) – indicate if addition of parentheses to footer elements should be
+disabled. Note that disabling this decreases machine-readability.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>workbook</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>gptables.GPWorkbook</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="quick-and-dirty-workbook-function">
+<h2><code class="docutils literal notranslate"><span class="pre">quick_and_dirty_workbook</span></code> function<a class="headerlink" href="#quick-and-dirty-workbook-function" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="gptables.core.api.quick_and_dirty_workbook">
+<code class="sig-prename descclassname">gptables.core.api.</code><code class="sig-name descname">quick_and_dirty_workbook</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">tables</span></em>, <em class="sig-param"><span class="n">theme</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">auto_width</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gptables/core/api.html#quick_and_dirty_workbook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gptables.core.api.quick_and_dirty_workbook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes a list of tables to the specified <cite>.xlsx</cite> file, with no metadata.</p>
+<p>This function may be useful for creating simple outputs,
+with no <code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">notes</span></code> or other associated metadata.
+Tables must be <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> objects with the row indexes
+in the first 1, 2 or 3 columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – path to write final workbook to (an <cite>.xlsx</cite> file)</p></li>
+<li><p><strong>tables</strong> (<em>list</em><em>[</em><em>pandas.DataFrame</em><em>]</em>) – ordered tables to be written to file</p></li>
+<li><p><strong>theme</strong> (<em>gptables.Theme</em><em>, </em><em>optional</em>) – formatting to be applied tot GPTable elements. <code class="docutils literal notranslate"><span class="pre">gptheme</span></code> is used by
+default</p></li>
+<li><p><strong>auto_width</strong> (<em>bool</em><em>, </em><em>optional</em>) – indicate if column widths should be automatically determined. True by default.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
 
 
-           </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="doc.changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="index.html" class="btn btn-neutral float-left" title="Good Practice Tables (gptables)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2020, David Foster, Alexander Newton
-
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="index.html" title="Previous document">Good Practice Tables (gptables)</a>
+        </li>
+        <li>
+          <a href="usage.html" title="Next document">Example Usage</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
         </div>
       </div>
-
-    </section>
-
+    <div class="clearer"></div>
   </div>
-  
+    <div class="footer">
+      &copy; Crown Copyright.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
 
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
     
-   
 
-</body>
+    
+  </body>
 </html>

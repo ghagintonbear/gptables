@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Usage &#8212; gptables 0.2.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GPTable" href="doc.gptable.html" />
+    <link rel="prev" title="API functions" href="doc.api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">gptables</a></h1>
+
+
+
+<p class="blurb">An opinionated python package for spreadsheet production.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=best-practice-and-impact&repo=gptables&type=watch&count=False&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="doc.api.html">API functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#iris-minimal-example">Iris - Minimal Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#iris-additional-formatting-example">Iris - Additional Formatting Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#iris-quick-and-dirty-example">Iris - Quick and Dirty Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#r-usage">R Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doc.gptable.html">GPTable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">XlsxWriter wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="doc.api.html" title="previous chapter">API functions</a></li>
+      <li>Next: <a href="doc.gptable.html" title="next chapter">GPTable</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="example-usage">
+<span id="id1"></span><h1>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h1>
+<p>This section demonstrates usage of the gptables API functions and core Classes.</p>
+<p>For source code and data used in these examples, please see the
+<a class="reference external" href="https://github.com/best-practice-and-impact/gptables/tree/dev/gptables/examples">examples</a> directory of the package.</p>
+<span class="target" id="module-gptables.examples.iris"></span><div class="section" id="iris-minimal-example">
+<h2>Iris - Minimal Example<a class="headerlink" href="#iris-minimal-example" title="Permalink to this headline">¶</a></h2>
+<p>This example demonstrates use of the <code class="docutils literal notranslate"><span class="pre">gptables.write_workbook</span></code> function.
+This API function is designed for production of consistently structured and formatted tables.</p>
+<p>Summary statistics from the classic iris dataset are used to build a <code class="docutils literal notranslate"><span class="pre">gptables.GPTable</span></code>
+object. Elements of metadata are provided to the corresponding parameters of the class.
+Where you wish to provide no metadata in required parameters, use <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="simple">
+<dt>Table formatting can be defined as a <code class="docutils literal notranslate"><span class="pre">gptable.Theme</span></code>, which is passed to the API functions</dt><dd><p>using the <code class="docutils literal notranslate"><span class="pre">theme</span></code> parameter. Or you can reply on our default - gptheme.</p>
+</dd>
+</dl>
+</div>
+<span class="target" id="module-gptables.examples.iris_additional_formatting"></span><div class="section" id="iris-additional-formatting-example">
+<h2>Iris - Additional Formatting Example<a class="headerlink" href="#iris-additional-formatting-example" title="Permalink to this headline">¶</a></h2>
+<p>This example demonstrates additional formatting that is not supported in
+the <code class="docutils literal notranslate"><span class="pre">gptable.Theme</span></code>.</p>
+<p>Specific columns, rows and cells of the table elements (indexes, column headings and data)
+can be formatted using the <code class="docutils literal notranslate"><span class="pre">gptable.GPTable(...,</span> <span class="pre">additional_formatting</span> <span class="pre">=</span> <span class="pre">...)</span></code> parameter.
+This parameter takes a list of dictionaries, allowing you to select as many rows, columns
+or cells as you like.</p>
+<p>As with all formatting, supported arguments are desribed in the
+<a class="reference external" href="https://xlsxwriter.readthedocs.io/format.html#format-methods-and-format-properties">XlsxWriter documentation</a>.</p>
+<p>Any formatting not possibly through this means can be achieved using
+<code class="docutils literal notranslate"><span class="pre">XlsxWriter</span></code> <a class="reference external" href="https://xlsxwriter.readthedocs.io/workbook.html">Workbook</a>
+and <a class="reference external" href="https://xlsxwriter.readthedocs.io/worksheet.html">Worksheet</a> functionality.
+A <code class="docutils literal notranslate"><span class="pre">gptable.GPWorkbook</span></code> object is returned when using the
+<code class="docutils literal notranslate"><span class="pre">gptables.produce_workbook</span></code> API function.
+The <code class="docutils literal notranslate"><span class="pre">GPWorkbook.worksheets()</span></code> function returns a list of <code class="docutils literal notranslate"><span class="pre">GPWorksheet</span></code> objects,
+which can also be modified.</p>
+</div>
+<span class="target" id="module-gptables.examples.iris_quick_and_dirty"></span><div class="section" id="iris-quick-and-dirty-example">
+<h2>Iris - Quick and Dirty Example<a class="headerlink" href="#iris-quick-and-dirty-example" title="Permalink to this headline">¶</a></h2>
+<p>This example demonstrates use of the <code class="docutils literal notranslate"><span class="pre">gptables.quick_and_dirty_workbook</span></code> function.
+This function is intended for use when only data, and no metadata, is required.
+It should <strong>not</strong> be used for production of reference statistical tables for publication.</p>
+<p>This function takes a list of <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> objects and writes each to a
+separate sheet of the specified output <cite>.xlsx</cite> file. Formatting is taken from
+the default <code class="docutils literal notranslate"><span class="pre">gptables.Theme</span></code> - gptheme - unless an alternative theme is provided
+using the <code class="docutils literal notranslate"><span class="pre">theme</span></code> parameter. Column widths are automatically adjusted,
+unless the <code class="docutils literal notranslate"><span class="pre">auto_width</span></code> parameter is set to False.</p>
+<p>Unlike the other API functions, <code class="docutils literal notranslate"><span class="pre">quick_and_dirty_workbook</span></code> does not require
+the user to specify table metadata or indicate which columns are row indexes.
+Up to 3 row index levels are automatically detected. However, as with the other
+API functions, row indices must be columns in the table instead of set as a <code class="docutils literal notranslate"><span class="pre">pandas.Index</span></code>.</p>
+</div>
+<div class="section" id="r-usage">
+<h2>R Usage<a class="headerlink" href="#r-usage" title="Permalink to this headline">¶</a></h2>
+<p>Use of <code class="docutils literal notranslate"><span class="pre">gptables</span></code> in R requires use of python via the <a class="reference external" href="https://rstudio.github.io/reticulate/">reticulate</a> package.</p>
+<p>This example demonstrates basic usage of the pacakge in R. More advanced usage will
+use a similar approach to python (above), but may require use of <code class="docutils literal notranslate"><span class="pre">reticulate</span></code> functions
+to create/modify python objects.</p>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="doc.api.html" title="Previous document">API functions</a>
+        </li>
+        <li>
+          <a href="doc.gptable.html" title="Next document">GPTable</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy; Crown Copyright.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
