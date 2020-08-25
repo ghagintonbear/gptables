@@ -4,8 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Changelog &#8212; gptables 0.2.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Changelog &#8212; gptables 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Example Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="doc.gptable.html">GPTable</a></li>
 <li class="toctree-l1"><a class="reference internal" href="doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.cover.html">Cover</a></li>
 <li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">XlsxWriter wrappers</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#released-master">Released (master)</a></li>
@@ -97,6 +98,26 @@ and this project tries its very best to adhere to
 <h2>Released (master)<a class="headerlink" href="#released-master" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="v0-2-0">
 <h3>v0.2.0<a class="headerlink" href="#v0-2-0" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Date</dt>
+<dd class="field-odd"><p>2020-08-24</p>
+</dd>
+</dl>
+<p><strong>Added</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Cover</span></code> dataclass, to provide text elements for cover pages. Provided via <code class="docutils literal notranslate"><span class="pre">cover</span></code> parameter of API functions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">write_cover</span></code> and associated <code class="docutils literal notranslate"><span class="pre">GPWorksheet</span></code> methods, for writing a cover page as the first sheet in a GPWorkbook</p></li>
+<li><p>additional <code class="docutils literal notranslate"><span class="pre">Theme</span></code> attributes for <code class="docutils literal notranslate"><span class="pre">Cover</span></code> text elements</p></li>
+<li><p>documentation for <code class="docutils literal notranslate"><span class="pre">Cover</span></code> class and example usage</p></li>
+</ul>
+<p><strong>Fixed</strong></p>
+<ul class="simple">
+<li><p>loads of typos in documentation</p></li>
+<li><p>broken CI deployment of docs - code includes were not working</p></li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h3>v0.2.0<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
 <dd class="field-odd"><p>2020-07-10</p>
@@ -182,7 +203,7 @@ instructions.</p></li>
       &copy; Crown Copyright.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

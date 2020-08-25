@@ -4,8 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example Usage &#8212; gptables 0.2.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example Usage &#8212; gptables 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="doc.api.html">API functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Example Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#iris-minimal-example">Iris - Minimal Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#iris-cover-page">Iris - Cover Page</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#iris-additional-formatting-example">Iris - Additional Formatting Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cost-of-reoffending-multiple-sheets-example">Cost of Reoffending - Multiple Sheets Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#iris-quick-and-dirty-example">Iris - Quick and Dirty Example</a></li>
@@ -59,6 +60,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="doc.gptable.html">GPTable</a></li>
 <li class="toctree-l1"><a class="reference internal" href="doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.cover.html">Cover</a></li>
 <li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">XlsxWriter wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -110,14 +112,12 @@ Where you wish to provide no metadata in required parameters, use <code class="d
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gptables</span> <span class="k">as</span> <span class="nn">gpt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">os</span>
-
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1">## Read data and arrange</span>
-<span class="n">funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">]</span>
-<span class="n">parent_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">parent_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
 
-<span class="n">iris_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">+</span> <span class="s2">&quot;/iris.csv&quot;</span><span class="p">)</span>
+<span class="n">iris_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;iris.csv&quot;</span><span class="p">)</span>
 <span class="n">iris_data</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">]]</span>
 
 <span class="n">iris_summary</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
@@ -170,15 +170,115 @@ Where you wish to provide no metadata in required parameters, use <code class="d
 <span class="n">iris_table</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">GPTable</span><span class="p">(</span>
         <span class="n">table</span> <span class="o">=</span> <span class="n">iris_summary</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>        
+        <span class="p">)</span>
 
 <span class="c1">## Use write_workbook to win!</span>
-<span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">+</span> <span class="s2">&quot;/python_iris_gptable.xlsx&quot;</span>
-<span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
-        <span class="n">sheets</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;iris flower dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">}</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="ow">is</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_gptable.xlsx&quot;</span>
+        <span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
+                <span class="n">sheets</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">}</span>
+                <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-gptables.examples.iris_cover"></span><div class="section" id="iris-cover-page">
+<h2>Iris - Cover Page<a class="headerlink" href="#iris-cover-page" title="Permalink to this headline">¶</a></h2>
+<p>This example demonstrates use of the <code class="docutils literal notranslate"><span class="pre">gptables.Cover</span></code> class to create a cover page.</p>
+<p>A gptables cover pages contain a range of custom text elements, along with a hyperlinked table of contents.
+Text elements are defined as a <code class="docutils literal notranslate"><span class="pre">gptables.Cover</span></code> instance, which is passed to the <code class="docutils literal notranslate"><span class="pre">cover</span></code> parameter of <code class="docutils literal notranslate"><span class="pre">gptables.write_worbook()</span></code> or <code class="docutils literal notranslate"><span class="pre">gptables.produce_worbook()</span></code>.
+In this example, we have also set <code class="docutils literal notranslate"><span class="pre">auto_width</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
+This automatically determines the width of the first column on the cover sheet, as well as all columns of the tables of the workbook.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gptables</span> <span class="k">as</span> <span class="nn">gpt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="c1">## Read data and arrange</span>
+<span class="n">parent_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+
+<span class="n">iris_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;iris.csv&quot;</span><span class="p">)</span>
+<span class="n">iris_data</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">]]</span>
+
+<span class="n">iris_summary</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
+<span class="n">iris_summary</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">iris_summary</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+<span class="n">iris_summary</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;class&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sepal_length&quot;</span><span class="p">:</span><span class="s2">&quot;Mean Sepal Length&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sepal_width&quot;</span><span class="p">:</span><span class="s2">&quot;Mean Sepal Width&quot;</span>
+            <span class="p">},</span> 
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+
+<span class="c1"># Drop index into table</span>
+<span class="n">iris_summary</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Insert NA to demonstrate missing value representation</span>
+<span class="n">iris_summary</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+<span class="c1">## Define table elements</span>
+<span class="n">title</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Mean&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;italic&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="s2">&quot; Iris&quot;</span><span class="p">,</span> <span class="s2">&quot;$$note2$$ sepal dimensions&quot;</span><span class="p">]</span>
+<span class="n">subtitles</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;1936 Fisher, R.A; The use of multiple measurements in taxonomic problems$$note1$$&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Just another subtitile&quot;</span>
+        <span class="p">]</span>
+<span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;cm&quot;</span>
+<span class="n">scope</span> <span class="o">=</span> <span class="s2">&quot;Iris&quot;</span>
+<span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;Source: Office for Iris Statistics&quot;</span>
+<span class="n">index</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>  <span class="c1"># Column 0 is a level 2 index</span>
+<span class="n">annotations</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;note1&quot;</span><span class="p">:</span> <span class="s2">&quot;I&#39;ve got 99 problems and taxonomy is one.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;note2&quot;</span><span class="p">:</span> <span class="s2">&quot;Goo Goo Dolls, 1998.&quot;</span>
+        <span class="p">}</span>
+<span class="n">notes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;This note hath no reference.&quot;</span>
+        <span class="p">]</span>
+
+<span class="c1"># or use kwargs to pass these to the appropriate parameters</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+        <span class="s2">&quot;subtitles&quot;</span><span class="p">:</span> <span class="n">subtitles</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="n">units</span><span class="p">,</span>
+        <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
+        <span class="s2">&quot;index_columns&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
+        <span class="s2">&quot;annotations&quot;</span><span class="p">:</span> <span class="n">annotations</span><span class="p">,</span>
+        <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="n">notes</span>
+        <span class="p">}</span>
+
+<span class="c1">## Define our GPTable</span>
+<span class="n">iris_table</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">GPTable</span><span class="p">(</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">iris_summary</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+<span class="n">iris_table_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">iris_table</span><span class="p">)</span>
+<span class="n">iris_table_copy</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;A copy of the first sheet$$note2$$&quot;</span><span class="p">)</span>
+
+<span class="n">cover</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">Cover</span><span class="p">(</span>
+        <span class="n">cover_label</span> <span class="o">=</span> <span class="s2">&quot;Notes&quot;</span><span class="p">,</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;A Worbook containing good practice tables&quot;</span><span class="p">,</span>
+        <span class="n">intro</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;This is some introductory information&quot;</span><span class="p">,</span> <span class="s2">&quot;And some more&quot;</span><span class="p">],</span>
+        <span class="n">about</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Even more info about my data&quot;</span><span class="p">,</span> <span class="s2">&quot;And a little more&quot;</span><span class="p">],</span>
+        <span class="n">contact</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="s2">&quot;Tel: 345345345&quot;</span><span class="p">],</span>
+        <span class="n">additional_elements</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;subtitles&quot;</span><span class="p">,</span> <span class="s2">&quot;scope&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;notes&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+<span class="c1">## Use write_workbook to win!</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="ow">is</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_cover_gptable.xlsx&quot;</span>
+        <span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
+                <span class="n">sheets</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">,</span>
+                        <span class="s2">&quot;Copy of Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table_copy</span><span class="p">},</span>
+                <span class="n">cover</span> <span class="o">=</span> <span class="n">cover</span><span class="p">,</span>
+                <span class="n">auto_width</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
 </pre></div>
 </div>
 <span class="target" id="module-gptables.examples.iris_additional_formatting"></span><div class="section" id="iris-additional-formatting-example">
@@ -203,12 +303,12 @@ which can also be modified.</p>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
-
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1">## Read data and arrange</span>
-<span class="n">funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">]</span>
-<span class="n">parent_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
-<span class="n">iris_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">+</span> <span class="s2">&quot;/iris.csv&quot;</span><span class="p">)</span>
+<span class="n">parent_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+
+<span class="n">iris_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;iris.csv&quot;</span><span class="p">)</span>
 
 <span class="n">iris_data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
         <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
@@ -227,6 +327,7 @@ which can also be modified.</p>
 
 <span class="c1"># Calculate summaries</span>
 <span class="n">subtables</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">funcs</span><span class="p">:</span>
     <span class="n">subtables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iris_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">func</span><span class="p">))</span>
     <span class="n">subtables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">iris_data</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;All&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
@@ -304,20 +405,21 @@ which can also be modified.</p>
         <span class="p">)</span>        
 
 <span class="c1">## Use produce workbook to return GPWorkbook</span>
-<span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">+</span> <span class="s2">&quot;/python_iris_additional_formatting_gptable.xlsx&quot;</span>
-<span class="n">wb</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">produce_workbook</span><span class="p">(</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
-        <span class="n">sheets</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;iris flower dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">}</span>
-        <span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="ow">is</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_additional_formatting_gptable.xlsx&quot;</span>
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">produce_workbook</span><span class="p">(</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
+                <span class="n">sheets</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">}</span>
+                <span class="p">)</span>
 
-<span class="c1"># Carry out additional modifications on the GPWorkbook or GPWorksheets</span>
-<span class="c1"># This supports all `XlsxWriter` package functionality</span>
-<span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">worksheets</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">ws</span><span class="o">.</span><span class="n">set_row</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>  <span class="c1"># Set the height of the first row</span>
+        <span class="c1"># Carry out additional modifications on the GPWorkbook or GPWorksheets</span>
+        <span class="c1"># This supports all `XlsxWriter` package functionality</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">worksheets</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ws</span><span class="o">.</span><span class="n">set_row</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>  <span class="c1"># Set the height of the first row</span>
 
-<span class="c1"># Finally use the close method to save the output</span>
-<span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+        <span class="c1"># Finally use the close method to save the output</span>
+        <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -335,11 +437,11 @@ one way to make this definition concise.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gptables</span> <span class="k">as</span> <span class="nn">gpt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">os</span>
-
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1">## Read data and arrange</span>
-<span class="n">parent_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
-<span class="n">core_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">+</span> <span class="s2">&quot;\coreB.csv&quot;</span><span class="p">)</span>
+<span class="n">parent_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+<span class="n">core_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;coreB.csv&quot;</span><span class="p">)</span>
 
 <span class="c1"># 3 tables: summary, children and young people, and adults</span>
 <span class="n">summ</span> <span class="o">=</span> <span class="n">core_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span><span class="s1">&#39;total_cost&#39;</span><span class="p">]]</span>
@@ -378,12 +480,13 @@ one way to make this definition concise.</p>
 <span class="n">sheets</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">gpt</span><span class="o">.</span><span class="n">GPTable</span><span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="o">**</span><span class="n">elements</span><span class="p">[</span><span class="n">name</span><span class="p">])</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">dct</span><span class="p">}</span>
 
 <span class="c1">## Use write_workbook to win!</span>
-<span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">+</span> <span class="s2">&quot;\python_cor_multiple_gptables.xlsx&quot;</span>
-<span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
-        <span class="n">sheets</span> <span class="o">=</span> <span class="n">sheets</span>
-        <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="ow">is</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_cor_multiple_gptables.xlsx&quot;</span>
+    <span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
+            <span class="n">sheets</span> <span class="o">=</span> <span class="n">sheets</span>
+            <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
 </pre></div>
 </div>
 <span class="target" id="module-gptables.examples.iris_quick_and_dirty"></span><div class="section" id="iris-quick-and-dirty-example">
@@ -405,13 +508,12 @@ API functions, row indices must be columns in the table instead of set as a <cod
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
-
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1">## Read data and arrange</span>
-<span class="n">funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">]</span>
-<span class="n">parent_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">parent_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
 
-<span class="n">iris_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">+</span> <span class="s2">&quot;/iris.csv&quot;</span><span class="p">)</span>
+<span class="n">iris_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;iris.csv&quot;</span><span class="p">)</span>
 <span class="n">iris_data</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">]]</span>
 
 <span class="n">iris_summary</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
@@ -439,12 +541,13 @@ API functions, row indices must be columns in the table instead of set as a <cod
 
 
 <span class="c1">## Write using quick and dirty method</span>
-<span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">+</span> <span class="s2">&quot;/python_iris_quick_and_dirty.xlsx&quot;</span>
-<span class="n">gpt</span><span class="o">.</span><span class="n">quick_and_dirty_workbook</span><span class="p">(</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
-        <span class="n">tables</span> <span class="o">=</span> <span class="p">[</span><span class="n">iris_summary_0</span><span class="p">,</span> <span class="n">iris_summary</span><span class="p">,</span> <span class="n">iris_summary_2</span><span class="p">,</span> <span class="n">iris_summary_3</span><span class="p">]</span>
-        <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="ow">is</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_quick_and_dirty.xlsx&quot;</span>
+        <span class="n">gpt</span><span class="o">.</span><span class="n">quick_and_dirty_workbook</span><span class="p">(</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
+                <span class="n">tables</span> <span class="o">=</span> <span class="p">[</span><span class="n">iris_summary_0</span><span class="p">,</span> <span class="n">iris_summary</span><span class="p">,</span> <span class="n">iris_summary_2</span><span class="p">,</span> <span class="n">iris_summary_3</span><span class="p">]</span>
+                <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -529,7 +632,7 @@ to create/modify python objects.</p>
       &copy; Crown Copyright.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

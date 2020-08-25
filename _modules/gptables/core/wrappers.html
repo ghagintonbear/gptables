@@ -4,8 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>gptables.core.wrappers &#8212; gptables 0.2.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gptables.core.wrappers &#8212; gptables 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Example Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.gptable.html">GPTable</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.cover.html">Cover</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.wrappers.html">XlsxWriter wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
@@ -92,6 +93,7 @@
 <span class="kn">from</span> <span class="nn">xlsxwriter.worksheet</span> <span class="kn">import</span> <span class="n">Worksheet</span>
 
 <span class="kn">from</span> <span class="nn">.theme</span> <span class="kn">import</span> <span class="n">Theme</span>
+<span class="kn">from</span> <span class="nn">.cover</span> <span class="kn">import</span> <span class="n">Cover</span>
 <span class="kn">from</span> <span class="nn">.gptable</span> <span class="kn">import</span> <span class="n">GPTable</span>
 <span class="kn">from</span> <span class="nn">gptables.utils.unpickle_themes</span> <span class="kn">import</span> <span class="n">gptheme</span>
 
@@ -101,7 +103,69 @@
 <span class="sd">    Wrapper for an XlsxWriter Worksheet object. Provides a method for writing</span>
 <span class="sd">    a good practice table (GPTable) to a Worksheet.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+    <span class="k">def</span> <span class="nf">write_cover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cover</span><span class="p">,</span> <span class="n">sheets</span><span class="p">,</span> <span class="n">auto_width</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write a cover page to the Worksheet. Uses text from a Cover object and</span>
+<span class="sd">        details of the Workbook contents.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cover : gptables.Cover</span>
+<span class="sd">            object containing cover sheet text</span>
+<span class="sd">        sheets : dict</span>
+<span class="sd">            mapping worksheet labels to gptables.GPTable objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">theme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theme</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">cover</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_title_format</span><span class="p">)</span>
+        <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">cover</span><span class="o">.</span><span class="n">intro</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="s2">&quot;Introductory information&quot;</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_subtitle_format</span><span class="p">)</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element_list</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">cover</span><span class="o">.</span><span class="n">intro</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_text_format</span><span class="p">)</span>
+            <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">sheets</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="s2">&quot;Contents&quot;</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_subtitle_format</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sheet</span><span class="p">,</span> <span class="n">gptable</span> <span class="ow">in</span> <span class="n">sheets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_hyperlinked_toc_entry</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">sheet</span><span class="p">)</span>
+                        
+                <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strip_annotation_references</span><span class="p">(</span><span class="n">gptable</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_text_format</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">cover</span><span class="o">.</span><span class="n">additional_elements</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">cover</span><span class="o">.</span><span class="n">additional_elements</span><span class="p">:</span>
+                        <span class="n">content</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">gptable</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span>        
+                        <span class="k">if</span> <span class="n">element</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;subtitles&quot;</span><span class="p">,</span> <span class="s2">&quot;notes&quot;</span><span class="p">]:</span>
+                            <span class="n">content</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_strip_annotation_references</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">content</span><span class="p">]</span>
+                            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element_list</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_text_format</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strip_annotation_references</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+                            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_text_format</span><span class="p">)</span>
+                <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">cover</span><span class="o">.</span><span class="n">about</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="s2">&quot;About these data&quot;</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_subtitle_format</span><span class="p">)</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element_list</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">cover</span><span class="o">.</span><span class="n">about</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_text_format</span><span class="p">)</span>
+            <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">cover</span><span class="o">.</span><span class="n">contact</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="s2">&quot;Contact&quot;</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_subtitle_format</span><span class="p">)</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_element_list</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">cover</span><span class="o">.</span><span class="n">contact</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">cover_text_format</span><span class="p">)</span>
+            <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+
+        <span class="k">if</span> <span class="n">sheets</span> <span class="ow">and</span> <span class="n">auto_width</span><span class="p">:</span>
+            <span class="n">max_link_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sheets</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
+            <span class="n">first_col_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_excel_string_width</span><span class="p">(</span>
+                <span class="n">max_link_len</span><span class="p">,</span>
+                <span class="n">theme</span><span class="o">.</span><span class="n">cover_text_format</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;font_size&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">10</span>
+                <span class="p">)</span>        
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_column_widths</span><span class="p">([</span><span class="n">first_col_width</span><span class="p">])</span>
+        
+
     <span class="k">def</span> <span class="nf">write_gptable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gptable</span><span class="p">,</span> <span class="n">auto_width</span><span class="p">,</span> <span class="n">disable_footer_parentheses</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write data from a GPTable object to the worksheet using the workbook</span>
@@ -110,7 +174,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        gptable : gptables.GPTable</span>
-<span class="sd">            object contianing elements of the gptable to be written to the</span>
+<span class="sd">            object containing elements of the gptable to be written to the</span>
 <span class="sd">            Worksheet</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
@@ -157,6 +221,22 @@
                     <span class="nb">getattr</span><span class="p">(</span><span class="n">gptable</span><span class="p">,</span> <span class="n">element</span><span class="p">),</span>
                     <span class="nb">getattr</span><span class="p">(</span><span class="n">theme</span><span class="p">,</span> <span class="n">element</span> <span class="o">+</span> <span class="s2">&quot;_format&quot;</span><span class="p">)</span>
                     <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_strip_annotation_references</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Strip annotation references (as $$ $$) from a str or list text element.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">no_annotations</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;\$\$.*\$\$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">no_annotations</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;\$\$.*\$\$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">part</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">part</span>
+                <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">text</span>
+                <span class="p">]</span>
+        
+        <span class="k">return</span> <span class="n">no_annotations</span>
 
 
     <span class="k">def</span> <span class="nf">_reference_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gptable</span><span class="p">):</span>
@@ -260,7 +340,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        string : str</span>
 <span class="sd">            input string with references replaced with numerical reference (n),</span>
-<span class="sd">            where n is the order of appearence in the resulting document</span>
+<span class="sd">            where n is the order of appearance in the resulting document</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replace_reference</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ordered_refs</span><span class="p">)</span>
@@ -283,7 +363,7 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_replace_reference</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">ordered_refs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Given a single string, record occurences of new references (denoted by</span>
+<span class="sd">        Given a single string, record occurrences of new references (denoted by</span>
 <span class="sd">        flanking dollar signs [$$reference$$]) and replace with number</span>
 <span class="sd">        reference reflecting order of detection.</span>
 <span class="sd">        </span>
@@ -348,7 +428,7 @@
 <span class="sd">            the string or list of rich string elements to be written</span>
 <span class="sd">        format_dict : dict</span>
 <span class="sd">            format to be applied to string</span>
-<span class="sd">        pos : tuple</span>
+<span class="sd">        pos : list</span>
 <span class="sd">            the position of the worksheet cell to write the element to</span>
 
 <span class="sd">        Returns</span>
@@ -374,7 +454,7 @@
 <span class="sd">            one per row</span>
 <span class="sd">        format_dict : dict</span>
 <span class="sd">            format to be applied to string</span>
-<span class="sd">        pos : tuple</span>
+<span class="sd">        pos : list</span>
 <span class="sd">            the position of the worksheet cell to write the elements to</span>
 
 <span class="sd">        Returns</span>
@@ -388,6 +468,37 @@
         
         <span class="k">return</span> <span class="n">pos</span>
 
+
+    <span class="k">def</span> <span class="nf">_write_hyperlinked_toc_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">sheet_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write a table of contents entry. Includes a hyperlink to the sheet</span>
+<span class="sd">        in the first column. Then data for that sheet in the second column.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pos : list</span>
+<span class="sd">            the position of the worksheet cell to write the elements to</span>
+<span class="sd">        sheet_name : str</span>
+<span class="sd">            name of sheet to hyperlink to</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pos: list</span>
+<span class="sd">            new position to write next element from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">theme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theme</span>
+
+        <span class="n">link</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;internal:&#39;</span><span class="si">{</span><span class="n">sheet_name</span><span class="si">}</span><span class="s2">&#39;!A1&quot;</span>
+        <span class="n">hyperlink_format</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">theme</span><span class="o">.</span><span class="n">cover_text_format</span><span class="p">)</span>
+        <span class="n">hyperlink_format</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;underline&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;font_color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_smart_write</span><span class="p">(</span>
+            <span class="o">*</span><span class="n">pos</span><span class="p">,</span>
+            <span class="n">link</span><span class="p">,</span>
+            <span class="n">hyperlink_format</span><span class="p">,</span>
+            <span class="n">sheet_name</span>
+            <span class="p">)</span>        
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_write_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -420,7 +531,7 @@
 <span class="sd">            note associate with each references, as {reference: note}</span>
 <span class="sd">        format_dict : dict</span>
 <span class="sd">            format to be applied to string</span>
-<span class="sd">        pos : tuple</span>
+<span class="sd">        pos : list</span>
 <span class="sd">            the position of the worksheet cell to write the elements to</span>
 
 <span class="sd">        Returns</span>
@@ -445,7 +556,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        gptable : gptables.GPTable</span>
 <span class="sd">            object containing the table and additional formatting data</span>
-<span class="sd">        pos : tuple</span>
+<span class="sd">        pos : list</span>
 <span class="sd">            the position of the worksheet cell to write the units to</span>
 <span class="sd">        auto_width : bool</span>
 <span class="sd">            select if column widths should be determined automatically using</span>
@@ -646,7 +757,7 @@
 <span class="sd">        formats : pandas.DataFrame</span>
 <span class="sd">            array of dictionaries that specify the formatting to be applied</span>
 <span class="sd">            to each cell of data</span>
-<span class="sd">        pos : tuple</span>
+<span class="sd">        pos : list</span>
 <span class="sd">            the position of the top left cell to start writing the array from</span>
 <span class="sd">            </span>
 <span class="sd">        Returns</span>
@@ -675,7 +786,7 @@
         <span class="k">return</span> <span class="n">pos</span>
         
 
-    <span class="k">def</span> <span class="nf">_smart_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_smart_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Depending on the input data, this function will write rich strings or</span>
 <span class="sd">        use the standard `write()` method. For rich strings, the base format is</span>
@@ -713,11 +824,12 @@
                     <span class="n">data_with_formats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="n">data_with_formats</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wb</span><span class="o">.</span><span class="n">add_format</span><span class="p">(</span><span class="n">format_dict</span><span class="p">))</span>
-
+            
             <span class="bp">self</span><span class="o">.</span><span class="n">write_rich_string</span><span class="p">(</span><span class="n">row</span><span class="p">,</span>
                                    <span class="n">col</span><span class="p">,</span>
                                    <span class="o">*</span><span class="n">data_with_formats</span><span class="p">,</span>
-                                   <span class="n">wb</span><span class="o">.</span><span class="n">add_format</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span>
+                                   <span class="n">wb</span><span class="o">.</span><span class="n">add_format</span><span class="p">(</span><span class="n">format_dict</span><span class="p">),</span>
+                                   <span class="o">*</span><span class="n">args</span>
                                    <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Write handles all other write types dynamically</span>
@@ -725,7 +837,8 @@
                     <span class="n">row</span><span class="p">,</span>
                     <span class="n">col</span><span class="p">,</span>
                     <span class="n">data</span><span class="p">,</span>
-                    <span class="n">wb</span><span class="o">.</span><span class="n">add_format</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span>
+                    <span class="n">wb</span><span class="o">.</span><span class="n">add_format</span><span class="p">(</span><span class="n">format_dict</span><span class="p">),</span>
+                    <span class="o">*</span><span class="n">args</span>
                     <span class="p">)</span>
 
 
@@ -763,7 +876,7 @@
     <span class="k">def</span> <span class="nf">_calculate_column_widths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">formats_table</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate Excel column widths using maximum length of strings</span>
-<span class="sd">        and the maxium font size in each column of the data table.</span>
+<span class="sd">        and the maximum font size in each column of the data table.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -834,7 +947,6 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GPWorkbook</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theme</span> <span class="o">=</span> <span class="kc">None</span>
-        
         <span class="c1"># Set default theme</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">gptheme</span><span class="p">)</span>
         
@@ -875,7 +987,7 @@
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">theme</span><span class="p">,</span> <span class="n">Theme</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`theme` must be a gptables.Theme object&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;`theme` must be a gptables.Theme object, not: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">theme</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theme</span> <span class="o">=</span> <span class="n">theme</span></div>
 </pre></div>
 
@@ -896,7 +1008,7 @@
       &copy; Crown Copyright.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

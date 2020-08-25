@@ -4,8 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Theme &#8212; gptables 0.2.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Theme &#8212; gptables 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -15,7 +15,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="XlsxWriter wrappers" href="doc.wrappers.html" />
+    <link rel="next" title="Cover" href="doc.cover.html" />
     <link rel="prev" title="GPTable" href="doc.gptable.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -56,6 +56,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-gptables.core.theme"><code class="docutils literal notranslate"><span class="pre">Theme</span></code> Class</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="doc.cover.html">Cover</a></li>
 <li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">XlsxWriter wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -65,7 +66,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="doc.gptable.html" title="previous chapter">GPTable</a></li>
-      <li>Next: <a href="doc.wrappers.html" title="next chapter">XlsxWriter wrappers</a></li>
+      <li>Next: <a href="doc.cover.html" title="next chapter">Cover</a></li>
   </ul></li>
 </ul>
 </div>
@@ -94,10 +95,13 @@
 <p>The easiest way to design your own theme is to create a
 YAML configuration file. You should take a copy of our default theme
 configuration file and adjust it to suit your needs.</p>
-<p>Most of the top level names in the config file represent elements of the table.
+<p>Most of the top level names in the config file represent table elements or their metadata.
 The parameters passed below these names are <a class="reference external" href="https://xlsxwriter.readthedocs.io/format.html#format-methods-and-format-properties">XlsxWriter format properties</a>, so you
 should check out their documentation to find the appropriate properties and valid
 options for your formatting.</p>
+<p><code class="docutils literal notranslate"><span class="pre">global</span></code> refers to the base format that all others will be built upon.
+Any format parameter that is repeated for a specific element will override the global format for that element.
+The three <code class="docutils literal notranslate"><span class="pre">cover_</span></code> format names refer to elements of the cover page generated from a <code class="xref py py-class docutils literal notranslate"><span class="pre">Cover</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>All top levels names must exist in the config file. Where no properties need to be passed, leave empty after the colon.</p>
@@ -115,6 +119,16 @@ A legend is automatically generated for this string, when missing values are pre
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">global</span><span class="p">:</span>
     <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">9</span>
     <span class="nt">font_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Arial</span>
+
+<span class="nt">cover_title</span><span class="p">:</span>
+    <span class="nt">bold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+    <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">12</span>
+
+<span class="nt">cover_subtitle</span><span class="p">:</span>
+    <span class="nt">bold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+    <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+
+<span class="nt">cover_text</span><span class="p">:</span>
 
 <span class="nt">title</span><span class="p">:</span>
     <span class="nt">bold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
@@ -179,6 +193,36 @@ structure as the configuration files.</p>
 <p>See XlsxWriter
 <a class="reference external" href="https://xlsxwriter.readthedocs.io/format.html#format-methods-and-format-properties">format properties</a>
 for valid options.</p>
+<dl class="py attribute">
+<dt id="gptables.core.theme.Theme.cover_title_format">
+<code class="sig-name descname">cover_title_format</code><a class="headerlink" href="#gptables.core.theme.Theme.cover_title_format" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gptables.core.theme.Theme.cover_subtitle_format">
+<code class="sig-name descname">cover_subtitle_format</code><a class="headerlink" href="#gptables.core.theme.Theme.cover_subtitle_format" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gptables.core.theme.Theme.cover_text_format">
+<code class="sig-name descname">cover_text_format</code><a class="headerlink" href="#gptables.core.theme.Theme.cover_text_format" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt id="gptables.core.theme.Theme.title_format">
 <code class="sig-name descname">title_format</code><a class="headerlink" href="#gptables.core.theme.Theme.title_format" title="Permalink to this definition">¶</a></dt>
@@ -357,6 +401,27 @@ existing items are replaced.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="gptables.core.theme.Theme.update_cover_subtitle_format">
+<code class="sig-name descname">update_cover_subtitle_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">format_dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gptables/core/theme.html#Theme.update_cover_subtitle_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gptables.core.theme.Theme.update_cover_subtitle_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the <cite>cover_subtitle_format</cite> attribute. Where keys already exist, existing
+items are replaced.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gptables.core.theme.Theme.update_cover_text_format">
+<code class="sig-name descname">update_cover_text_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">format_dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gptables/core/theme.html#Theme.update_cover_text_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gptables.core.theme.Theme.update_cover_text_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the <cite>cover_text_format</cite> attribute. Where keys already exist, existing
+items are replaced.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gptables.core.theme.Theme.update_cover_title_format">
+<code class="sig-name descname">update_cover_title_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">format_dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gptables/core/theme.html#Theme.update_cover_title_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gptables.core.theme.Theme.update_cover_title_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the <cite>cover_title_format</cite> attribute. Where keys already exist, existing
+items are replaced.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="gptables.core.theme.Theme.update_data_format">
 <code class="sig-name descname">update_data_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">format_dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gptables/core/theme.html#Theme.update_data_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gptables.core.theme.Theme.update_data_format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the <cite>data_format</cite> attribute. Where keys already exist,
@@ -442,7 +507,7 @@ existing items are replaced.</p>
 <dt id="gptables.core.theme.Theme.update_title_format">
 <code class="sig-name descname">update_title_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">format_dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gptables/core/theme.html#Theme.update_title_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gptables.core.theme.Theme.update_title_format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the <cite>title_format</cite> attribute. Where keys already exist, existing
-items are replaced..</p>
+items are replaced.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -468,7 +533,7 @@ items are replaced.</p>
           <a href="doc.gptable.html" title="Previous document">GPTable</a>
         </li>
         <li>
-          <a href="doc.wrappers.html" title="Next document">XlsxWriter wrappers</a>
+          <a href="doc.cover.html" title="Next document">Cover</a>
           &rarr;
         </li>
     </ul>
@@ -483,7 +548,7 @@ items are replaced.</p>
       &copy; Crown Copyright.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

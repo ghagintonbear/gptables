@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cover &#8212; gptables 0.3.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="XlsxWriter wrappers" href="doc.wrappers.html" />
+    <link rel="prev" title="Theme" href="doc.theme.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">gptables</a></h1>
+
+
+
+<p class="blurb">An opinionated python package for spreadsheet production.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=best-practice-and-impact&repo=gptables&type=watch&count=False&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="doc.api.html">API functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.gptable.html">GPTable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.theme.html">Theme</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mapping">Mapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#formatting">Formatting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gptables.core.cover"><code class="docutils literal notranslate"><span class="pre">Cover</span></code> Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">XlsxWriter wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="doc.theme.html" title="previous chapter">Theme</a></li>
+      <li>Next: <a href="doc.wrappers.html" title="next chapter">XlsxWriter wrappers</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="cover">
+<h1>Cover<a class="headerlink" href="#cover" title="Permalink to this headline">¶</a></h1>
+<p>Cover sheets can be used to provide information that is general to all tables in a Workbook.
+In addition to this, <code class="docutils literal notranslate"><span class="pre">gptables</span></code> cover sheets include a hyperlinked table of contents including customisable elements from each <a class="reference internal" href="doc.gptable.html#gptables.core.gptable.GPTable" title="gptables.core.gptable.GPTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">GPTable</span></code></a> in the Workbook.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Cover sheets are added as the first sheet in the Worbook when written by <code class="docutils literal notranslate"><span class="pre">gptables</span></code>.
+This is important when applying additional formatting to other Worksheets by their index in the Workbook.</p>
+</div>
+<div class="section" id="mapping">
+<h2>Mapping<a class="headerlink" href="#mapping" title="Permalink to this headline">¶</a></h2>
+<p>To include a cover sheet, map your text elements to the attributes of a <code class="docutils literal notranslate"><span class="pre">Cover</span></code> object and pass this object to the <code class="docutils literal notranslate"><span class="pre">cover</span></code> parameter of either <a class="reference internal" href="doc.api.html#gptables.core.api.produce_workbook" title="gptables.core.api.produce_workbook"><code class="xref py py-func docutils literal notranslate"><span class="pre">produce_workbook()</span></code></a> or <a class="reference internal" href="doc.api.html#gptables.core.api.write_workbook" title="gptables.core.api.write_workbook"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_workbook()</span></code></a>.
+Text attributes which take a list (most except for title) will write one element per cell horizontally in the Worksheet.</p>
+</div>
+<div class="section" id="formatting">
+<h2>Formatting<a class="headerlink" href="#formatting" title="Permalink to this headline">¶</a></h2>
+<p>Formatting of cover sheet text is managed by the <code class="docutils literal notranslate"><span class="pre">cover_</span></code> attributes of the Workbook’s <code class="xref py py-class docutils literal notranslate"><span class="pre">Theme</span></code>.</p>
+</div>
+<div class="section" id="module-gptables.core.cover">
+<span id="cover-class"></span><h2><code class="docutils literal notranslate"><span class="pre">Cover</span></code> Class<a class="headerlink" href="#module-gptables.core.cover" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gptables.core.cover.Cover">
+<em class="property">class </em><code class="sig-prename descclassname">gptables.core.cover.</code><code class="sig-name descname">Cover</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">intro</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">about</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">contact</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cover_label</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'Cover'</span></em>, <em class="sig-param"><span class="n">additional_elements</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gptables/core/cover.html#Cover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gptables.core.cover.Cover" title="Permalink to this definition">¶</a></dt>
+<dd><p>dataclass for storing cover sheet text.</p>
+<dl class="py attribute">
+<dt id="gptables.core.cover.Cover.title">
+<code class="sig-name descname">title</code><a class="headerlink" href="#gptables.core.cover.Cover.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>cover page title</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gptables.core.cover.Cover.intro">
+<code class="sig-name descname">intro</code><a class="headerlink" href="#gptables.core.cover.Cover.intro" title="Permalink to this definition">¶</a></dt>
+<dd><p>introductory text</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[str, dict], optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gptables.core.cover.Cover.about">
+<code class="sig-name descname">about</code><a class="headerlink" href="#gptables.core.cover.Cover.about" title="Permalink to this definition">¶</a></dt>
+<dd><p>about/notes text</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[str, dict], optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gptables.core.cover.Cover.contact">
+<code class="sig-name descname">contact</code><a class="headerlink" href="#gptables.core.cover.Cover.contact" title="Permalink to this definition">¶</a></dt>
+<dd><p>contact details text</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[str, dict], optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gptables.core.cover.Cover.cover_label">
+<code class="sig-name descname">cover_label</code><a class="headerlink" href="#gptables.core.cover.Cover.cover_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>cover page tab label, defaults to Cover</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gptables.core.cover.Cover.additional_elements">
+<code class="sig-name descname">additional_elements</code><a class="headerlink" href="#gptables.core.cover.Cover.additional_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>additional GPTable elements to display in the contents table. Allowed
+elements are “subtitles”, “scope”, “source” and “notes”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[str], optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="doc.theme.html" title="Previous document">Theme</a>
+        </li>
+        <li>
+          <a href="doc.wrappers.html" title="Next document">XlsxWriter wrappers</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy; Crown Copyright.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

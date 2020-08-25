@@ -4,8 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>gptables.core.gptable &#8212; gptables 0.2.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gptables.core.gptable &#8212; gptables 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Example Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.gptable.html">GPTable</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.cover.html">Cover</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.wrappers.html">XlsxWriter wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
@@ -97,7 +98,7 @@
 <span class="sd">    title : str</span>
 <span class="sd">        description of the table</span>
 <span class="sd">    subtitles : list</span>
-<span class="sd">        subtitiles as a list of strings</span>
+<span class="sd">        subtitles as a list of strings</span>
 <span class="sd">    scope : str</span>
 <span class="sd">        description of scope/basis of data in table</span>
 <span class="sd">    units : str or dict</span>
@@ -301,7 +302,7 @@
 <div class="viewcode-block" id="GPTable.set_units"><a class="viewcode-back" href="../../../doc.gptable.html#gptables.core.gptable.GPTable.set_units">[docs]</a>    <span class="k">def</span> <span class="nf">set_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_units</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the `units` attribute using the supplied str, list or dictionary.</span>
-<span class="sd">        Units supplied as a list must match the length of columng headings,</span>
+<span class="sd">        Units supplied as a list must match the length of column headings,</span>
 <span class="sd">        excluding index columns. Units as a dict should be in the format</span>
 <span class="sd">        {column: units_text}. Column can be column name or 0-indexed column</span>
 <span class="sd">        number in `table`. Index columns cannot have units.</span>
@@ -507,7 +508,7 @@
       &copy; Crown Copyright.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

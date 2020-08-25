@@ -4,8 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPTable &#8212; gptables 0.2.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPTable &#8212; gptables 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -59,6 +59,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc.cover.html">Cover</a></li>
 <li class="toctree-l1"><a class="reference internal" href="doc.wrappers.html">XlsxWriter wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -133,7 +134,7 @@ applied in addition to the formatting of that element specified in the <a class=
 <h2>Additional formatting<a class="headerlink" href="#additional-formatting" title="Permalink to this headline">¶</a></h2>
 <p>In some cases you may want to apply one-off formatting on specific rows, columns or cells of the data.
 As mentioned above, this formatting should not be used to represent data or important information.</p>
-<p>Bespoke formatting can be applied to an individual <code class="docutils literal notranslate"><span class="pre">GPTable</span></code> via the <code class="docutils literal notranslate"><span class="pre">additonal_formatting</span></code> parameter,
+<p>Bespoke formatting can be applied to an individual <code class="docutils literal notranslate"><span class="pre">GPTable</span></code> via the <code class="docutils literal notranslate"><span class="pre">additional_formatting</span></code> parameter,
 when creating a <code class="docutils literal notranslate"><span class="pre">GPTable</span></code> instance. This parameter takes a list of dictionaries, where each dictionary
 defines formatting for one or more rows, columns or cells.</p>
 <p>These dictionaries have a single key indicating the type of selection, from from “column”, “row” or “cell”.
@@ -215,7 +216,7 @@ to excel.</p>
 <dl class="py attribute">
 <dt id="gptables.core.gptable.GPTable.subtitles">
 <code class="sig-name descname">subtitles</code><a class="headerlink" href="#gptables.core.gptable.GPTable.subtitles" title="Permalink to this definition">¶</a></dt>
-<dd><p>subtitiles as a list of strings</p>
+<dd><p>subtitles as a list of strings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>list</p>
@@ -401,7 +402,7 @@ existing values for these attributes.</p>
 <dt id="gptables.core.gptable.GPTable.set_units">
 <code class="sig-name descname">set_units</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_units</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gptables/core/gptable.html#GPTable.set_units"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gptables.core.gptable.GPTable.set_units" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the <cite>units</cite> attribute using the supplied str, list or dictionary.
-Units supplied as a list must match the length of columng headings,
+Units supplied as a list must match the length of column headings,
 excluding index columns. Units as a dict should be in the format
 {column: units_text}. Column can be column name or 0-indexed column
 number in <cite>table</cite>. Index columns cannot have units.</p>
@@ -438,7 +439,7 @@ number in <cite>table</cite>. Index columns cannot have units.</p>
       &copy; Crown Copyright.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

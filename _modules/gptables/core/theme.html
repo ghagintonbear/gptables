@@ -4,8 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>gptables.core.theme &#8212; gptables 0.2.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gptables.core.theme &#8212; gptables 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Example Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.gptable.html">GPTable</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.theme.html">Theme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../doc.cover.html">Cover</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../doc.wrappers.html">XlsxWriter wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
@@ -116,6 +117,12 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+<span class="sd">    cover_title_format : dict</span>
+
+<span class="sd">    cover_subtitle_format : dict</span>
+
+<span class="sd">    cover_text_format : dict</span>
+<span class="sd">    </span>
 <span class="sd">    title_format : dict</span>
 
 <span class="sd">    subtitle_format : dict</span>
@@ -161,6 +168,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">## Formats</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_format_attributes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;cover_title_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cover_subtitle_format&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cover_text_format&quot;</span><span class="p">,</span>
             <span class="s2">&quot;title_format&quot;</span><span class="p">,</span>
             <span class="s2">&quot;subtitle_format&quot;</span><span class="p">,</span>
             <span class="s2">&quot;scope_format&quot;</span><span class="p">,</span>
@@ -319,11 +329,37 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">data_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="Theme.update_cover_title_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_cover_title_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_cover_title_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `cover_title_format` attribute. Where keys already exist, existing</span>
+<span class="sd">        items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cover_title_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="Theme.update_cover_subtitle_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_cover_subtitle_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_cover_subtitle_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `cover_subtitle_format` attribute. Where keys already exist, existing</span>
+<span class="sd">        items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cover_subtitle_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Theme.update_cover_text_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_cover_text_format">[docs]</a>    <span class="nd">@validate_single_format</span>
+    <span class="k">def</span> <span class="nf">update_cover_text_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the `cover_text_format` attribute. Where keys already exist, existing</span>
+<span class="sd">        items are replaced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cover_text_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Theme.update_title_format"><a class="viewcode-back" href="../../../doc.theme.html#gptables.core.theme.Theme.update_title_format">[docs]</a>    <span class="nd">@validate_single_format</span>
     <span class="k">def</span> <span class="nf">update_title_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the `title_format` attribute. Where keys already exist, existing</span>
-<span class="sd">        items are replaced..</span>
+<span class="sd">        items are replaced.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">title_format</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span></div>
 
@@ -474,7 +510,7 @@
       &copy; Crown Copyright.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
