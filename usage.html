@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Example Usage &#8212; gptables 0.3.0 documentation</title>
+    <title>Example Usage &#8212; gptables 0.3.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -123,13 +123,13 @@ Where you wish to provide no metadata in required parameters, use <code class="d
 <span class="n">iris_summary</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
 <span class="n">iris_summary</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">iris_summary</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
 <span class="n">iris_summary</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;class&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;sepal_length&quot;</span><span class="p">:</span><span class="s2">&quot;Mean Sepal Length&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;sepal_width&quot;</span><span class="p">:</span><span class="s2">&quot;Mean Sepal Width&quot;</span>
-            <span class="p">},</span> 
-        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_length&quot;</span><span class="p">:</span> <span class="s2">&quot;Mean Sepal Length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_width&quot;</span><span class="p">:</span> <span class="s2">&quot;Mean Sepal Width&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
 
 <span class="c1"># Drop index into table</span>
 <span class="n">iris_summary</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -140,46 +140,41 @@ Where you wish to provide no metadata in required parameters, use <code class="d
 <span class="c1">## Define table elements</span>
 <span class="n">title</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Mean&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;italic&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="s2">&quot; Iris&quot;</span><span class="p">,</span> <span class="s2">&quot;$$note2$$ sepal dimensions&quot;</span><span class="p">]</span>
 <span class="n">subtitles</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;1936 Fisher, R.A; The use of multiple measurements in taxonomic problems$$note1$$&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Just another subtitile&quot;</span>
-        <span class="p">]</span>
+    <span class="s2">&quot;1936 Fisher, R.A; The use of multiple measurements in taxonomic problems$$note1$$&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Just another subtitile&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
 <span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;cm&quot;</span>
 <span class="n">scope</span> <span class="o">=</span> <span class="s2">&quot;Iris&quot;</span>
 <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;Source: Office for Iris Statistics&quot;</span>
 <span class="n">index</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>  <span class="c1"># Column 0 is a level 2 index</span>
 <span class="n">annotations</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;note1&quot;</span><span class="p">:</span> <span class="s2">&quot;I&#39;ve got 99 problems and taxonomy is one.&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;note2&quot;</span><span class="p">:</span> <span class="s2">&quot;Goo Goo Dolls, 1998.&quot;</span>
-        <span class="p">}</span>
-<span class="n">notes</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;This note hath no reference.&quot;</span>
-        <span class="p">]</span>
+    <span class="s2">&quot;note1&quot;</span><span class="p">:</span> <span class="s2">&quot;I&#39;ve got 99 problems and taxonomy is one.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;note2&quot;</span><span class="p">:</span> <span class="s2">&quot;Goo Goo Dolls, 1998.&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="n">notes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;This note hath no reference.&quot;</span><span class="p">]</span>
 
 <span class="c1"># or use kwargs to pass these to the appropriate parameters</span>
-<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
-        <span class="s2">&quot;subtitles&quot;</span><span class="p">:</span> <span class="n">subtitles</span><span class="p">,</span>
-        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="n">units</span><span class="p">,</span>
-        <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span>
-        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
-        <span class="s2">&quot;index_columns&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
-        <span class="s2">&quot;annotations&quot;</span><span class="p">:</span> <span class="n">annotations</span><span class="p">,</span>
-        <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="n">notes</span>
-        <span class="p">}</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+    <span class="s2">&quot;subtitles&quot;</span><span class="p">:</span> <span class="n">subtitles</span><span class="p">,</span>
+    <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="n">units</span><span class="p">,</span>
+    <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
+    <span class="s2">&quot;index_columns&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
+    <span class="s2">&quot;annotations&quot;</span><span class="p">:</span> <span class="n">annotations</span><span class="p">,</span>
+    <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="n">notes</span><span class="p">,</span>
+    <span class="p">}</span>
 
 <span class="c1">## Define our GPTable</span>
-<span class="n">iris_table</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">GPTable</span><span class="p">(</span>
-        <span class="n">table</span> <span class="o">=</span> <span class="n">iris_summary</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
+<span class="n">iris_table</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">GPTable</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">iris_summary</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <span class="c1">## Use write_workbook to win!</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="ow">is</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-        <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_gptable.xlsx&quot;</span>
-        <span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span>
-                <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
-                <span class="n">sheets</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">}</span>
-                <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_gptable.xlsx&quot;</span>
+    <span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span>
+        <span class="n">filename</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span> <span class="n">sheets</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">}</span>
+        <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
 </pre></div>
 </div>
 <span class="target" id="module-gptables.examples.iris_cover"></span><div class="section" id="iris-cover-page">
@@ -206,13 +201,13 @@ This automatically determines the width of the first column on the cover sheet, 
 <span class="n">iris_summary</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
 <span class="n">iris_summary</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">iris_summary</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
 <span class="n">iris_summary</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;class&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;sepal_length&quot;</span><span class="p">:</span><span class="s2">&quot;Mean Sepal Length&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;sepal_width&quot;</span><span class="p">:</span><span class="s2">&quot;Mean Sepal Width&quot;</span>
-            <span class="p">},</span> 
-        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_length&quot;</span><span class="p">:</span> <span class="s2">&quot;Mean Sepal Length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_width&quot;</span><span class="p">:</span> <span class="s2">&quot;Mean Sepal Width&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="c1"># Drop index into table</span>
 <span class="n">iris_summary</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -223,62 +218,59 @@ This automatically determines the width of the first column on the cover sheet, 
 <span class="c1">## Define table elements</span>
 <span class="n">title</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Mean&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;italic&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="s2">&quot; Iris&quot;</span><span class="p">,</span> <span class="s2">&quot;$$note2$$ sepal dimensions&quot;</span><span class="p">]</span>
 <span class="n">subtitles</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;1936 Fisher, R.A; The use of multiple measurements in taxonomic problems$$note1$$&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Just another subtitile&quot;</span>
-        <span class="p">]</span>
+    <span class="s2">&quot;1936 Fisher, R.A; The use of multiple measurements in taxonomic problems$$note1$$&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Just another subtitile&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
 <span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;cm&quot;</span>
 <span class="n">scope</span> <span class="o">=</span> <span class="s2">&quot;Iris&quot;</span>
 <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;Source: Office for Iris Statistics&quot;</span>
 <span class="n">index</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>  <span class="c1"># Column 0 is a level 2 index</span>
 <span class="n">annotations</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;note1&quot;</span><span class="p">:</span> <span class="s2">&quot;I&#39;ve got 99 problems and taxonomy is one.&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;note2&quot;</span><span class="p">:</span> <span class="s2">&quot;Goo Goo Dolls, 1998.&quot;</span>
-        <span class="p">}</span>
-<span class="n">notes</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;This note hath no reference.&quot;</span>
-        <span class="p">]</span>
+    <span class="s2">&quot;note1&quot;</span><span class="p">:</span> <span class="s2">&quot;I&#39;ve got 99 problems and taxonomy is one.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;note2&quot;</span><span class="p">:</span> <span class="s2">&quot;Goo Goo Dolls, 1998.&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="n">notes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;This note hath no reference.&quot;</span><span class="p">]</span>
 
 <span class="c1"># or use kwargs to pass these to the appropriate parameters</span>
-<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
-        <span class="s2">&quot;subtitles&quot;</span><span class="p">:</span> <span class="n">subtitles</span><span class="p">,</span>
-        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="n">units</span><span class="p">,</span>
-        <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span>
-        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
-        <span class="s2">&quot;index_columns&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
-        <span class="s2">&quot;annotations&quot;</span><span class="p">:</span> <span class="n">annotations</span><span class="p">,</span>
-        <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="n">notes</span>
-        <span class="p">}</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+    <span class="s2">&quot;subtitles&quot;</span><span class="p">:</span> <span class="n">subtitles</span><span class="p">,</span>
+    <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="n">units</span><span class="p">,</span>
+    <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
+    <span class="s2">&quot;index_columns&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
+    <span class="s2">&quot;annotations&quot;</span><span class="p">:</span> <span class="n">annotations</span><span class="p">,</span>
+    <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="n">notes</span><span class="p">,</span>
+    <span class="p">}</span>
 
 <span class="c1">## Define our GPTable</span>
-<span class="n">iris_table</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">GPTable</span><span class="p">(</span>
-        <span class="n">table</span> <span class="o">=</span> <span class="n">iris_summary</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
+<span class="n">iris_table</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">GPTable</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">iris_summary</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <span class="n">iris_table_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">iris_table</span><span class="p">)</span>
 <span class="n">iris_table_copy</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;A copy of the first sheet$$note2$$&quot;</span><span class="p">)</span>
 
 <span class="n">cover</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">Cover</span><span class="p">(</span>
-        <span class="n">cover_label</span> <span class="o">=</span> <span class="s2">&quot;Notes&quot;</span><span class="p">,</span>
-        <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;A Worbook containing good practice tables&quot;</span><span class="p">,</span>
-        <span class="n">intro</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;This is some introductory information&quot;</span><span class="p">,</span> <span class="s2">&quot;And some more&quot;</span><span class="p">],</span>
-        <span class="n">about</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Even more info about my data&quot;</span><span class="p">,</span> <span class="s2">&quot;And a little more&quot;</span><span class="p">],</span>
-        <span class="n">contact</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="s2">&quot;Tel: 345345345&quot;</span><span class="p">],</span>
-        <span class="n">additional_elements</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;subtitles&quot;</span><span class="p">,</span> <span class="s2">&quot;scope&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;notes&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
+    <span class="n">cover_label</span><span class="o">=</span><span class="s2">&quot;Notes&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;A Worbook containing good practice tables&quot;</span><span class="p">,</span>
+    <span class="n">intro</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;This is some introductory information&quot;</span><span class="p">,</span> <span class="s2">&quot;And some more&quot;</span><span class="p">],</span>
+    <span class="n">about</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Even more info about my data&quot;</span><span class="p">,</span> <span class="s2">&quot;And a little more&quot;</span><span class="p">],</span>
+    <span class="n">contact</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;John Doe&quot;</span><span class="p">,</span> <span class="s2">&quot;Tel: 345345345&quot;</span><span class="p">],</span>
+    <span class="n">additional_elements</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;subtitles&quot;</span><span class="p">,</span> <span class="s2">&quot;scope&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;notes&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
 
 <span class="c1">## Use write_workbook to win!</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="ow">is</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-        <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_cover_gptable.xlsx&quot;</span>
-        <span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span>
-                <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
-                <span class="n">sheets</span> <span class="o">=</span> <span class="p">{</span>
-                        <span class="s2">&quot;Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">,</span>
-                        <span class="s2">&quot;Copy of Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table_copy</span><span class="p">},</span>
-                <span class="n">cover</span> <span class="o">=</span> <span class="n">cover</span><span class="p">,</span>
-                <span class="n">auto_width</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_cover_gptable.xlsx&quot;</span>
+    <span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span>
+        <span class="n">filename</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span>
+        <span class="n">sheets</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">,</span>
+            <span class="s2">&quot;Copy of Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table_copy</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="n">cover</span><span class="o">=</span><span class="n">cover</span><span class="p">,</span>
+        <span class="n">auto_width</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
 </pre></div>
 </div>
 <span class="target" id="module-gptables.examples.iris_additional_formatting"></span><div class="section" id="iris-additional-formatting-example">
@@ -311,19 +303,17 @@ which can also be modified.</p>
 <span class="n">iris_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;iris.csv&quot;</span><span class="p">)</span>
 
 <span class="n">iris_data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;class&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;sepal_length&quot;</span><span class="p">:</span><span class="s2">&quot;Sepal Length&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petal_length&quot;</span><span class="p">:</span><span class="s2">&quot;Petal Length&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petal_width&quot;</span><span class="p">:</span><span class="s2">&quot;Petal Width&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;sepal_width&quot;</span><span class="p">:</span><span class="s2">&quot;Sepal Width&quot;</span>
-            <span class="p">},</span> 
-        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_length&quot;</span><span class="p">:</span> <span class="s2">&quot;Sepal Length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;petal_length&quot;</span><span class="p">:</span> <span class="s2">&quot;Petal Length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;petal_width&quot;</span><span class="p">:</span> <span class="s2">&quot;Petal Width&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_width&quot;</span><span class="p">:</span> <span class="s2">&quot;Sepal Width&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
 
-<span class="n">iris_data</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-        <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">][</span><span class="mi">5</span><span class="p">:]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span>
-        <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">iris_data</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">][</span><span class="mi">5</span><span class="p">:]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Calculate summaries</span>
 <span class="n">subtables</span> <span class="o">=</span> <span class="p">[]</span>
@@ -339,87 +329,76 @@ which can also be modified.</p>
 <span class="n">iris_summary</span> <span class="o">=</span> <span class="n">iris_summary</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 <span class="n">iris_summary</span> <span class="o">=</span> <span class="n">iris_summary</span><span class="o">.</span><span class="n">melt</span><span class="p">([</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;func&quot;</span><span class="p">])</span>
 <span class="n">iris_summary</span> <span class="o">=</span> <span class="n">iris_summary</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
-        <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;func&quot;</span><span class="p">],</span>
-        <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
-        <span class="n">values</span><span class="o">=</span><span class="s2">&quot;value&quot;</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;func&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;value&quot;</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
 <span class="c1">## Define table elements</span>
 <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Iris flower dimensions&quot;</span>
 <span class="n">subtitles</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;1936 Fisher, R.A; The use of multiple measurements in taxonomic problems&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Just another subtitile&quot;</span>
-        <span class="p">]</span>
+    <span class="s2">&quot;1936 Fisher, R.A; The use of multiple measurements in taxonomic problems&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Just another subtitile&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
 <span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;cm&quot;</span>
 <span class="n">scope</span> <span class="o">=</span> <span class="s2">&quot;Iris&quot;</span>
-<span class="n">index</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span>
-        <span class="p">}</span>
+<span class="n">index</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
 
 <span class="c1">## Define additional formatting</span>
 <span class="c1"># Columns can be references by name or number</span>
 <span class="c1"># Rows may only be referenced by number</span>
 <span class="c1"># Column and row numbers refer to the table elements, including indexes and column headings</span>
 <span class="n">additional_formatting</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;column&quot;</span><span class="p">:</span>
-            <span class="p">{</span><span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Setosa&quot;</span><span class="p">,</span> <span class="s2">&quot;Versicolor&quot;</span><span class="p">],</span>  <span class="c1"># str, int or list of either</span>
-             <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;align&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span><span class="p">},</span>
-             <span class="s2">&quot;include_names&quot;</span><span class="p">:</span> <span class="kc">False</span>  <span class="c1"># Whether to include column headings (optional)</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;column&quot;</span><span class="p">:</span>
-            <span class="p">{</span><span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span>
-             <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
-             <span class="s2">&quot;include_names&quot;</span><span class="p">:</span> <span class="kc">True</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;row&quot;</span><span class="p">:</span>
-            <span class="p">{</span><span class="s2">&quot;rows&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Numbers only, but can refer to last row using -1</span>
-             <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>  <span class="c1"># Underline row</span>
-             <span class="s2">&quot;include_names&quot;</span><span class="p">:</span> <span class="kc">True</span>  <span class="c1"># Whether to include row indexes</span>
-             <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;cell&quot;</span><span class="p">:</span>
-            <span class="p">{</span><span class="s2">&quot;cells&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>  <span class="c1"># tuple or list of tuples</span>
-             <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;font_color&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">}</span>
-                <span class="p">}</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;column&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Setosa&quot;</span><span class="p">,</span> <span class="s2">&quot;Versicolor&quot;</span><span class="p">],</span>  <span class="c1"># str, int or list of either</span>
+            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;align&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;include_names&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Whether to include column headings (optional)</span>
         <span class="p">}</span>
-<span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;column&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="s2">&quot;include_names&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;row&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;rows&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Numbers only, but can refer to last row using -1</span>
+            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>  <span class="c1"># Underline row</span>
+            <span class="s2">&quot;include_names&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Whether to include row indexes</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;cells&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>  <span class="c1"># tuple or list of tuples</span>
+            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;font_color&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">},</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">]</span>
 
 <span class="c1"># or just use kwargs</span>
 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
-        <span class="s2">&quot;subtitles&quot;</span><span class="p">:</span> <span class="n">subtitles</span><span class="p">,</span>
-        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="n">units</span><span class="p">,</span>
-        <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span>
-        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;index_columns&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
-        <span class="s2">&quot;additional_formatting&quot;</span><span class="p">:</span> <span class="n">additional_formatting</span>
-        <span class="p">}</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+    <span class="s2">&quot;subtitles&quot;</span><span class="p">:</span> <span class="n">subtitles</span><span class="p">,</span>
+    <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="n">units</span><span class="p">,</span>
+    <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;index_columns&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
+    <span class="s2">&quot;additional_formatting&quot;</span><span class="p">:</span> <span class="n">additional_formatting</span><span class="p">,</span>
+    <span class="p">}</span>
 
 <span class="c1">## Define our GPTable</span>
-<span class="n">iris_table</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">GPTable</span><span class="p">(</span>
-        <span class="n">table</span> <span class="o">=</span> <span class="n">iris_summary</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>        
+<span class="n">iris_table</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">GPTable</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">iris_summary</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <span class="c1">## Use produce workbook to return GPWorkbook</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="ow">is</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-        <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_additional_formatting_gptable.xlsx&quot;</span>
-        <span class="n">wb</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">produce_workbook</span><span class="p">(</span>
-                <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
-                <span class="n">sheets</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">}</span>
-                <span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_additional_formatting_gptable.xlsx&quot;</span>
+    <span class="n">wb</span> <span class="o">=</span> <span class="n">gpt</span><span class="o">.</span><span class="n">produce_workbook</span><span class="p">(</span>
+        <span class="n">filename</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span> <span class="n">sheets</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Iris Flower Dimensions&quot;</span><span class="p">:</span> <span class="n">iris_table</span><span class="p">}</span>
+        <span class="p">)</span>
 
-        <span class="c1"># Carry out additional modifications on the GPWorkbook or GPWorksheets</span>
-        <span class="c1"># This supports all `XlsxWriter` package functionality</span>
-        <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">worksheets</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">ws</span><span class="o">.</span><span class="n">set_row</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>  <span class="c1"># Set the height of the first row</span>
+    <span class="c1"># Carry out additional modifications on the GPWorkbook or GPWorksheets</span>
+    <span class="c1"># This supports all `XlsxWriter` package functionality</span>
+    <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">worksheets</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ws</span><span class="o">.</span><span class="n">set_row</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>  <span class="c1"># Set the height of the first row</span>
 
-        <span class="c1"># Finally use the close method to save the output</span>
-        <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+    <span class="c1"># Finally use the close method to save the output</span>
+    <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -444,8 +423,8 @@ one way to make this definition concise.</p>
 <span class="n">core_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;coreB.csv&quot;</span><span class="p">)</span>
 
 <span class="c1"># 3 tables: summary, children and young people, and adults</span>
-<span class="n">summ</span> <span class="o">=</span> <span class="n">core_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span><span class="s1">&#39;total_cost&#39;</span><span class="p">]]</span>
-<span class="n">summ</span> <span class="o">=</span> <span class="n">summ</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">summ</span> <span class="o">=</span> <span class="n">core_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;total_cost&quot;</span><span class="p">]]</span>
+<span class="n">summ</span> <span class="o">=</span> <span class="n">summ</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;age&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
 <span class="c1"># This returns adults first as per the data</span>
 <span class="n">ages</span> <span class="o">=</span> <span class="n">core_data</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
@@ -456,36 +435,29 @@ one way to make this definition concise.</p>
     <span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;reoffence_group&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
     <span class="n">dct</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">frame</span>
 
-<span class="n">dct</span><span class="p">[</span><span class="s1">&#39;summary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summ</span>
+<span class="n">dct</span><span class="p">[</span><span class="s2">&quot;summary&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summ</span>
 
 
 <span class="c1">## Define table elements for each table</span>
 
 <span class="n">example</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Cost of Reoffending&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;subtitles&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;12-month follow-up period for the 2016 offender cohort&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;£&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="s2">&quot;England and Wales&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;Office for National Statistics&quot;</span>
-        <span class="p">}</span>
-
-<span class="n">elements</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="n">example</span><span class="p">,</span>
-    <span class="s1">&#39;Adults&#39;</span><span class="p">:</span> <span class="n">example</span><span class="p">,</span>
-    <span class="s1">&#39;Children and young people&#39;</span><span class="p">:</span> <span class="n">example</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Cost of Reoffending&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;subtitles&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;12-month follow-up period for the 2016 offender cohort&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;£&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="s2">&quot;England and Wales&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;Office for National Statistics&quot;</span><span class="p">,</span>
     <span class="p">}</span>
+
+<span class="n">elements</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="n">example</span><span class="p">,</span> <span class="s2">&quot;Adults&quot;</span><span class="p">:</span> <span class="n">example</span><span class="p">,</span> <span class="s2">&quot;Children and young people&quot;</span><span class="p">:</span> <span class="n">example</span><span class="p">}</span>
 
 <span class="c1">## Generate a dictionary of sheet names to GPTable objects</span>
 <span class="c1">## using the elements defined above</span>
 <span class="n">sheets</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">gpt</span><span class="o">.</span><span class="n">GPTable</span><span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="o">**</span><span class="n">elements</span><span class="p">[</span><span class="n">name</span><span class="p">])</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">dct</span><span class="p">}</span>
 
 <span class="c1">## Use write_workbook to win!</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="ow">is</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_cor_multiple_gptables.xlsx&quot;</span>
-    <span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
-            <span class="n">sheets</span> <span class="o">=</span> <span class="n">sheets</span>
-            <span class="p">)</span>
+    <span class="n">gpt</span><span class="o">.</span><span class="n">write_workbook</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span> <span class="n">sheets</span><span class="o">=</span><span class="n">sheets</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -519,13 +491,13 @@ API functions, row indices must be columns in the table instead of set as a <cod
 <span class="n">iris_summary</span> <span class="o">=</span> <span class="n">iris_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
 <span class="n">iris_summary</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">iris_summary</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
 <span class="n">iris_summary</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;class&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;sepal_length&quot;</span><span class="p">:</span><span class="s2">&quot;Mean Sepal Length&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;sepal_width&quot;</span><span class="p">:</span><span class="s2">&quot;Mean Sepal Width&quot;</span>
-            <span class="p">},</span> 
-        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;class&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_length&quot;</span><span class="p">:</span><span class="s2">&quot;Mean Sepal Length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_width&quot;</span><span class="p">:</span><span class="s2">&quot;Mean Sepal Width&quot;</span>
+    <span class="p">},</span> 
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
 
 <span class="c1"># Drop index into table</span>
 <span class="n">iris_summary</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -541,13 +513,13 @@ API functions, row indices must be columns in the table instead of set as a <cod
 
 
 <span class="c1">## Write using quick and dirty method</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="ow">is</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-        <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_quick_and_dirty.xlsx&quot;</span>
-        <span class="n">gpt</span><span class="o">.</span><span class="n">quick_and_dirty_workbook</span><span class="p">(</span>
-                <span class="n">filename</span> <span class="o">=</span> <span class="n">output_path</span><span class="p">,</span>
-                <span class="n">tables</span> <span class="o">=</span> <span class="p">[</span><span class="n">iris_summary_0</span><span class="p">,</span> <span class="n">iris_summary</span><span class="p">,</span> <span class="n">iris_summary_2</span><span class="p">,</span> <span class="n">iris_summary_3</span><span class="p">]</span>
-                <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">parent_dir</span> <span class="o">/</span> <span class="s2">&quot;python_iris_quick_and_dirty.xlsx&quot;</span>
+    <span class="n">gpt</span><span class="o">.</span><span class="n">quick_and_dirty_workbook</span><span class="p">(</span>
+        <span class="n">filename</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span>
+        <span class="n">tables</span><span class="o">=</span><span class="p">[</span><span class="n">iris_summary_0</span><span class="p">,</span> <span class="n">iris_summary</span><span class="p">,</span> <span class="n">iris_summary_2</span><span class="p">,</span> <span class="n">iris_summary_3</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output written at: &quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
 
 </pre></div>
 </div>
